@@ -31,23 +31,43 @@ Path slugs: `get-started`, `admin`, `controller`, `payables`, `receivables`,
 
 - **Choose your role** scrolls to the role grid.
 - **Role card** selects that role and shows its path panel (deep link: `index.html#role-payables`).
-- **Start / Resume path** and every **course row** open `paths/<slug>.html#lesson-<n>`.
-- **Progress card** and the avatar menu resume the next lesson in progress.
+- **Start / Resume path** and every **course row** open `paths/<slug>.html#lesson-<lesson-id>`.
+- **Progress card** and the avatar menu open the next unfinished lesson of the path you were last on.
 - **Get started banner** opens `paths/get-started.html`.
 - **New customer? See the go-live path** opens `paths/go-live.html`.
 - **Certification cards** open the matching role path. **Partner cards** and **Become a Light partner** open `paths/partners.html`.
 - **Search courses** (or press `/` or `Ctrl+K`) finds any course and jumps to it.
 - **Take the tour** walks through the homepage step by step. It is offered automatically on a first visit.
 
-## Integrating the real lesson pages
+## Progress and check marks
 
-Pick whichever fits:
+A lesson is marked complete **only when the learner clicks "Next lesson"** (or
+"Finish path" on the last lesson). Opening a lesson, jumping to it from the
+sidebar or watching the video does not tick it. The check mark then shows in the
+"In this path" sidebar, on the lesson card, in the homepage path panel, the hero
+progress card, the avatar menu and the certification badges.
 
-1. **Replace the file.** Overwrite `paths/<slug>.html` with the real page. Homepage links keep working.
-2. **Point elsewhere.** In `assets/js/data.js`, set `lessonUrl` on a role, or `url` on a course,
-   and every link to it follows.
-3. **Fill the slots.** Each lesson on a path page renders
-   `<div class="lesson-slot" data-lesson-slot="<slug>/<n>">`. Put lesson content in there.
+Progress is saved in the learner's browser (`localStorage`). Each path page has a
+"Reset progress" link. To move progress to a backend later, replace the functions
+in `window.ACADEMY_PROGRESS` at the bottom of `assets/js/data.js`.
+
+## Adding lessons, videos and interactive demos
+
+Everything lives in `assets/js/data.js`; the comment at the top documents every field.
+
+- **Add a lesson:** add `{ title, time }` to a path's `courses` list. Counts,
+  search, links and progress update automatically. Saved progress is keyed by
+  lesson id (a slug of the title), so inserting or reordering lessons never moves
+  anyone's check marks. Set an explicit `id` before renaming a lesson.
+- **Add media:** give the lesson a `content` list of blocks, shown top to bottom:
+  - `{ type: "video", src, poster, title, caption }`: an MP4 in `media/videos/`, or a YouTube, Vimeo or Loom link.
+  - `{ type: "demo", src, title, height }`: an Arcade, Storylane, Navattic or Supademo link, or a local page in `media/demos/`. It loads when the learner clicks it and can go full screen.
+  - `{ type: "text", html, title }`: notes, key points, steps.
+  Lessons without `content` show a video and a demo placeholder.
+- **New block types** (quiz, checklist, download): add a renderer to `BLOCKS` in `assets/js/lesson.js`.
+- **Separate lesson pages:** set `url` on a lesson, or `lessonUrl` on a path, to link somewhere else instead.
+
+See `media/README.md` for file layout and size limits.
 
 ## Motion
 

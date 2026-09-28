@@ -55,14 +55,16 @@
     );
 
     // Avatar menu: quick resume.
-    const role = U.findRole(A.inProgress.role);
-    const nextIdx = role.courses.findIndex((c) => c.status !== "completed");
+    const feat = U.featuredPath();
+    const role = feat.role;
     const menu = el.querySelector(".avatar-menu");
     menu.innerHTML =
       '<p class="avatar-name">' + U.escape(A.learner.name) + "</p>" +
-      '<p class="avatar-meta">' + U.escape(role.name) + " path · " + A.inProgress.percent + "%</p>" +
-      '<div class="avatar-bar"><span style="width:' + A.inProgress.percent + '%"></span></div>' +
-      '<a role="menuitem" href="' + U.lessonUrl(role.slug, nextIdx) + '">Resume: ' + U.escape(role.courses[nextIdx].title) + "</a>" +
+      '<p class="avatar-meta">' + U.escape(role.name) + " path · " + feat.pct + "%</p>" +
+      '<div class="avatar-bar"><span style="width:' + feat.pct + '%"></span></div>' +
+      (feat.nextIndex >= 0
+        ? '<a role="menuitem" href="' + U.lessonUrl(role.slug, feat.nextIndex) + '">' + (feat.started ? "Resume: " : "Start: ") + U.escape(role.courses[feat.nextIndex].title) + "</a>"
+        : "") +
       '<a role="menuitem" href="' + homeLink("#certifications") + '">My certifications</a>';
     const avatar = el.querySelector(".avatar");
     avatar.addEventListener("click", (e) => {

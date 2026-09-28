@@ -8,19 +8,26 @@
   document.querySelectorAll(".hero-title .word").forEach((w, i) => w.style.setProperty("--i", i));
 
   /* ---------- Hero progress card ---------- */
-  const inRole = U.findRole(A.inProgress.role);
-  const nextIdx = inRole.courses.findIndex((c) => c.status !== "completed");
+  const feat = U.featuredPath();
+  const inRole = feat.role;
+  const nextCourse = feat.nextIndex >= 0 ? inRole.courses[feat.nextIndex] : null;
   const card = document.getElementById("progress-card");
-  card.href = U.lessonUrl(inRole.slug, nextIdx);
-  card.querySelector(".progress-card-title").textContent = inRole.name + " path in progress";
-  card.querySelector(".progress-card-sub").textContent = A.inProgress.label;
-  card.querySelector(".progress-card-next strong").textContent = inRole.courses[nextIdx].title;
+  card.href = U.lessonUrl(inRole.slug, feat.nextIndex >= 0 ? feat.nextIndex : null);
+  card.querySelector(".progress-card-title").textContent = feat.complete
+    ? inRole.name + " path complete"
+    : feat.started
+      ? inRole.name + " path in progress"
+      : "Start the " + inRole.name + " path";
+  card.querySelector(".progress-card-sub").textContent = feat.done + " of " + feat.total + " lessons complete";
+  card.querySelector(".progress-card-next").firstElementChild.innerHTML = nextCourse
+    ? (feat.started ? "Next up" : "First up") + " · <strong>" + U.escape(nextCourse.title) + "</strong>"
+    : "<strong>All lessons done.</strong> Time to get certified.";
 
   function animateRing() {
     const fill = card.querySelector(".ring-fill");
     const value = card.querySelector(".ring-value");
     const circ = 2 * Math.PI * 33;
-    const target = A.inProgress.percent;
+    const target = feat.pct;
     fill.style.strokeDasharray = String(circ);
     fill.style.strokeDashoffset = String(circ);
     if (reduceMotion) {
@@ -43,7 +50,15 @@
 
   /* ---------- Get started banner ---------- */
   const gs = A.getStarted;
+  const gsState = U.pathState(gs.slug);
   document.querySelector(".start-banner-sub").textContent = gs.summary + " · " + gs.courses.length + " courses";
+  const gsPill = document.querySelector(".start-banner .pill");
+  if (gsState.complete) {
+    gsPill.innerHTML = U.icon("check") + "Completed";
+  } else {
+    gsPill.className = "pill pill-start";
+    gsPill.innerHTML = (gsState.started ? gsState.done + " of " + gsState.total + " done" : "Start here") + U.icon("arrow");
+  }
   document.getElementById("start-banner").classList.add("glow-track");
 
   /* ---------- Role grid ---------- */
@@ -65,21 +80,22 @@
     .join("");
 
   function panelHtml(r) {
-    const done = r.courses.filter((c) => c.status === "completed").length;
-    const firstOpen = r.courses.findIndex((c) => c.status !== "completed");
-    const pct = Math.round((done / r.courses.length) * 100);
+    const st = U.pathState(r.slug);
+    const done = st.done;
+    const firstOpen = st.nextIndex;
+    const pct = st.pct;
     return (
       '<div class="path-head">' +
       '<span class="path-icon">' + U.icon(r.icon) + "</span>" +
       '<div class="path-head-text"><h3>' + U.escape(r.name) + " path</h3><p>" + U.escape(r.description) + "</p></div>" +
-      '<a class="btn btn-dark" href="' + U.lessonUrl(r.slug, done ? firstOpen : null) + '">' + (done ? "Resume path" : "Start path") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>" +
+      '<a class="btn btn-dark" href="' + U.lessonUrl(r.slug, done && firstOpen >= 0 ? firstOpen : null) + '">' + (st.complete ? "Review path" : done ? "Resume path" : "Start path") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>" +
       "</div>" +
       (done ? '<div class="path-meter" aria-label="' + pct + '% complete"><span style="--w:' + pct + '%"></span></div>' : "") +
       '<ol class="course-list">' +
       r.courses
         .map((c, i) => {
-          const completed = c.status === "completed";
-          const next = c.status === "next";
+          const completed = st.doneIds.has(c.id);
+          const next = st.started && i === firstOpen;
           return (
             '<li style="--i:' + i + '"><a class="course-row' + (completed ? " is-done" : "") + (next ? " is-next" : "") + '" href="' + U.lessonUrl(r.slug, i) + '">' +
             '<span class="course-num">' + (completed ? U.icon("check") : i + 1) + "</span>" +
@@ -160,13 +176,15 @@
   /* ---------- Certifications ---------- */
   document.getElementById("cert-grid").innerHTML = A.certifications
     .map((c, i) => {
-      const progress = c.status === "in-progress";
+      const cs = U.pathState(c.role);
+      const progress = cs.started && !cs.complete;
+      const label = cs.complete ? "Ready for assessment" : progress ? "In progress" : "Locked";
       return (
         '<a class="cert-card tilt reveal" href="' + U.lessonUrl(c.role) + '" style="--d:' + (0.1 + i * 0.1) + 's">' +
-        '<span class="cert-icon">' + U.icon(progress ? "sparkles" : "lock") + "</span>" +
+        '<span class="cert-icon">' + U.icon(cs.started ? "sparkles" : "lock") + "</span>" +
         "<h3>" + U.escape(c.name) + "</h3>" +
         "<p>" + U.escape(c.description) + "</p>" +
-        '<span class="pill ' + (progress ? "pill-live" : "pill-locked") + '">' + (progress ? "In progress" : "Locked") + "</span>" +
+        '<span class="pill ' + (cs.started ? "pill-live" : "pill-locked") + '">' + label + "</span>" +
         "</a>"
       );
     })
@@ -206,7 +224,7 @@
     {
       target: "[data-tour='path']",
       title: "Your path, lesson by lesson",
-      body: "Every row opens that lesson. Completed lessons are ticked and the next one is flagged for you.",
+      body: "Every row opens that lesson. A lesson is ticked once you click Next lesson on it, and the next one is flagged for you.",
       before: () => selectRole(A.roles[0].slug, { instant: true })
     },
     { target: "[data-tour='certs']", title: "Get certified", body: "Finish a path, pass a hands-on sandbox assessment and earn a credential for your LinkedIn." },
