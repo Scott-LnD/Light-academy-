@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Light Academy</title>
+  <meta name="description" content="Learn Light your way. Pick your role and get exactly the part of Light you need." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="home" data-base="">
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  <div class="concept-banner">Concept mockup · sample content.</div>
+  <header class="site-header" id="site-header"></header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero container" id="home" data-tour="hero">
+      <div class="hero-copy">
+        <p class="eyebrow-brand reveal"><span class="mini-mark"></span>Welcome to Light Academy</p>
+        <h1 class="hero-title">
+          <span class="line"><span class="word">learn</span> <span class="word">light,</span> <span class="word accent"><em>your</em></span></span>
+          <span class="line"><span class="word">way.</span></span>
+        </h1>
+        <p class="hero-sub reveal" style="--d: 0.35s">Pick your role and get exactly the part of Light you need, from filing an expense to running the month-end close.</p>
+        <div class="hero-actions reveal" style="--d: 0.5s">
+          <a class="btn btn-primary magnetic" href="#roles" data-tour="choose-role">Choose your role <span class="btn-icon" data-icon="arrow"></span></a>
+          <a class="btn btn-ghost magnetic" href="paths/go-live.html">New customer? See the go-live path.</a>
+        </div>
+      </div>
+
+      <a class="progress-card glass reveal" style="--d: 0.3s" id="progress-card" data-tour="progress">
+        <div class="progress-card-mark"></div>
+        <div class="progress-card-row">
+          <div class="ring" aria-hidden="true">
+            <svg viewBox="0 0 80 80">
+              <circle class="ring-track" cx="40" cy="40" r="33" />
+              <circle class="ring-fill" cx="40" cy="40" r="33" />
+            </svg>
+            <span class="ring-value">0%</span>
+          </div>
+          <div>
+            <p class="progress-card-title"></p>
+            <p class="progress-card-sub"></p>
+          </div>
+        </div>
+        <div class="progress-card-next">
+          <span>Next up · <strong></strong></span>
+          <span class="progress-card-go" data-icon="arrow"></span>
+        </div>
+      </a>
+    </section>
+
+    <!-- GET STARTED -->
+    <section class="container">
+      <a class="start-banner reveal" id="start-banner" href="paths/get-started.html" data-tour="start">
+        <div class="start-banner-glow" aria-hidden="true"></div>
+        <div>
+          <p class="eyebrow">Everyone starts here</p>
+          <h2 class="start-banner-title">get started with light</h2>
+          <p class="start-banner-sub"></p>
+        </div>
+        <span class="pill pill-done"><span data-icon="check"></span>Completed</span>
+        <div class="start-banner-bigmark" aria-hidden="true"></div>
+      </a>
+    </section>
+
+    <!-- ROLES -->
+    <section class="section container" id="roles">
+      <div class="section-head reveal">
+        <h2 class="section-title">choose your role</h2>
+        <p class="section-sub">Each path teaches only the slice of Light that role touches. Admins &amp; Controllers are the place to start.</p>
+      </div>
+
+      <div class="role-grid" id="role-grid" role="tablist" aria-label="Roles" data-tour="role-grid"></div>
+
+      <div class="path-panel glass reveal" id="path-panel" role="tabpanel" aria-live="polite" data-tour="path"></div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section class="section container" id="certifications">
+      <div class="cert-shell reveal" data-tour="certs">
+        <div class="cert-glow" aria-hidden="true"></div>
+        <div class="cert-logo"><span class="mini-mark light"></span>Light</div>
+        <h2 class="cert-title">prove your light expertise.</h2>
+        <p class="cert-sub">Earn a role-based credential: hands-on, assessed in a real sandbox, ready for your LinkedIn.</p>
+        <div class="cert-grid" id="cert-grid"></div>
+        <p class="cert-foot">Partners &amp; external accountants can earn the <a href="#partners">Light Certified Advisor</a> credential.</p>
+      </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section class="section container" id="partners" data-tour="partners">
+      <div class="section-head reveal">
+        <h2 class="section-title">for partners</h2>
+        <p class="section-sub">Accounting firms, implementation partners and external advisors get a dedicated track. Learn Light once, deploy it across every client.</p>
+      </div>
+      <div class="partner-grid" id="partner-grid"></div>
+      <a class="btn btn-primary magnetic reveal" href="paths/partners.html">Become a Light partner <span class="btn-icon" data-icon="arrow"></span></a>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
+</html>
