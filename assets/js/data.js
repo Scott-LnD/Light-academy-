@@ -1,25 +1,53 @@
 /*
  * Light Academy content model.
- * Every page reads from here, so roles, courses and progress live in one place.
- * When the real lesson pages are ready, point `lessonUrl` (per role) or
- * `url` (per course) at them and the homepage links follow automatically.
+ * Every page reads from here, so paths and lessons live in one place.
+ *
+ * ADDING A LESSON: add an object to a path's `courses` list, in the order it
+ * should appear. Homepage counts, search, the lesson page and progress all
+ * pick it up automatically.
+ *
+ * LESSON FIELDS
+ *   title    (required) Shown everywhere.
+ *   time     Duration label, e.g. "15–30 min".
+ *   id       Optional stable key used for progress and links. Defaults to a
+ *            slug of the title. Set it before renaming a lesson so learners
+ *            keep their check mark.
+ *   url      Optional. Send this lesson to a separate page instead.
+ *   content  Optional list of blocks, shown top to bottom. Without it the
+ *            lesson shows "video" and "interactive demo" placeholders.
+ *
+ * CONTENT BLOCKS (see assets/js/lesson.js to add new types)
+ *   { type: "video", src: "media/videos/admin/approvals.mp4", poster: "...", title: "...", caption: "..." }
+ *       src can also be a YouTube, Vimeo or Loom link.
+ *   { type: "demo", src: "https://app.arcade.software/share/...", title: "...", height: 640 }
+ *       Any embeddable interactive demo (Arcade, Storylane, Navattic, Supademo)
+ *       or a local page such as "media/demos/admin/approvals/index.html".
+ *   { type: "text", html: "<p>Key points...</p>" }
+ *
+ * Example:
+ *   { title: "Approval workflows & guardrails", time: "15–30 min", content: [
+ *       { type: "video", src: "media/videos/admin/approvals.mp4" },
+ *       { type: "demo", src: "https://app.arcade.software/share/XXXX", title: "Build an approval rule" }
+ *   ] }
+ *
+ * Progress is saved in the learner's browser. A lesson is marked complete
+ * only when the learner clicks "Next lesson" (or "Finish path") on it.
  */
 window.ACADEMY = {
   learner: { initials: "KL", name: "Kim Lee" },
 
-  // Shown in the hero progress card.
-  inProgress: { role: "admin", percent: 40, label: "Foundation complete" },
+  // Path featured in the hero card until the learner starts one.
+  defaultPath: "admin",
 
   getStarted: {
     slug: "get-started",
     eyebrow: "Everyone starts here",
     title: "get started with light",
     summary: "Navigate Light, how the ledger works, your first login",
-    status: "completed",
     courses: [
-      { title: "Navigating Light", time: "10 min", status: "completed" },
-      { title: "How the ledger works", time: "15 min", status: "completed" },
-      { title: "Your first login", time: "5 min", status: "completed" }
+      { title: "Navigating Light", time: "10 min" },
+      { title: "How the ledger works", time: "15 min" },
+      { title: "Your first login", time: "5 min" }
     ]
   },
 
@@ -32,9 +60,9 @@ window.ACADEMY = {
       startHere: true,
       description: "Set up and govern Light end to end: entities, users, controls, integrations.",
       courses: [
-        { title: "Entities & chart of accounts", time: "15–30 min", status: "completed" },
-        { title: "Users, roles & groups", time: "15–30 min", status: "completed" },
-        { title: "Approval workflows & guardrails", time: "15–30 min", status: "next" },
+        { title: "Entities & chart of accounts", time: "15–30 min" },
+        { title: "Users, roles & groups", time: "15–30 min" },
+        { title: "Approval workflows & guardrails", time: "15–30 min" },
         { title: "Integrations & bank connections", time: "15–30 min" },
         { title: "Security & SSO", time: "15–30 min" },
         { title: "Accounting periods & close calendar", time: "15–30 min" }
@@ -108,19 +136,16 @@ window.ACADEMY = {
     {
       name: "Light Certified Administrator",
       description: "Configure, govern and secure a Light instance for a whole company.",
-      status: "in-progress",
       role: "admin"
     },
     {
       name: "Light Certified Controller",
       description: "Run the books in Light: ledger, reconciliation, consolidation, close.",
-      status: "locked",
       role: "controller"
     },
     {
       name: "Light Certified User",
       description: "Everyday Light fluency: expenses, cards, invoices and approvals.",
-      status: "locked",
       role: "employee"
     }
   ],
@@ -184,7 +209,7 @@ window.ACADEMY_UTIL = {
     const course = role && courseIndex != null ? role.courses[courseIndex] : null;
     if (course && course.url) return course.url;
     if (role && role.lessonUrl && courseIndex == null) return role.lessonUrl;
-    const hash = courseIndex != null ? "#lesson-" + (courseIndex + 1) : "";
+    const hash = course ? "#lesson-" + course.id : "";
     return this.base() + "paths/" + slug + ".html" + hash;
   },
   findRole(slug) {
@@ -211,14 +236,118 @@ window.ACADEMY_UTIL = {
       search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
       play: '<path d="M8 5v14l11-7z"/>',
       close: '<path d="M6 6l12 12M18 6 6 18"/>',
-      compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>'
+      compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+      cursor: '<path d="M5 3l14 7-6 2-2 6z"/><path d="m13 12 5 5"/>',
+      expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'
     }[name] || "";
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + "</svg>";
   },
   logoMark() {
     return '<svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#111"/><path fill="#fff" d="M7 7h7v11h11v7H7z"/><path fill="#fff" d="M18 7h7v7h-7z"/></svg>';
   },
+  slugify(s) {
+    return String(s).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  },
+  allPaths() {
+    const A = window.ACADEMY;
+    return [this.findRole(A.getStarted.slug)].concat(A.roles, A.extraPaths);
+  },
+  // Progress summary for one path: which lessons are done and what is next.
+  pathState(slug) {
+    const r = this.findRole(slug);
+    const doneIds = window.ACADEMY_PROGRESS.done(slug);
+    const done = r.courses.filter((c) => doneIds.has(c.id)).length;
+    const nextIndex = r.courses.findIndex((c) => !doneIds.has(c.id));
+    return {
+      role: r,
+      doneIds: doneIds,
+      done: done,
+      total: r.courses.length,
+      pct: r.courses.length ? Math.round((done / r.courses.length) * 100) : 0,
+      nextIndex: nextIndex,
+      started: done > 0,
+      complete: r.courses.length > 0 && done === r.courses.length
+    };
+  },
+  // The path to feature in the hero card and avatar menu.
+  featuredPath() {
+    const A = window.ACADEMY;
+    const last = window.ACADEMY_PROGRESS.last();
+    if (last && this.findRole(last) && !this.pathState(last).complete) return this.pathState(last);
+    const order = [A.defaultPath].concat(A.roles.map((r) => r.slug));
+    for (const slug of order) {
+      const st = this.pathState(slug);
+      if (!st.complete) return st;
+    }
+    return this.pathState(A.defaultPath);
+  },
   escape(s) {
     return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 };
+
+/* Give every lesson a stable id (used for progress and #lesson-<id> links). */
+(function () {
+  const A = window.ACADEMY;
+  const U = window.ACADEMY_UTIL;
+  [A.getStarted].concat(A.roles, A.extraPaths).forEach((path) => {
+    const seen = {};
+    path.courses.forEach((c) => {
+      let id = c.id || U.slugify(c.title);
+      while (seen[id]) id += "-2";
+      seen[id] = true;
+      c.id = id;
+    });
+  });
+})();
+
+/*
+ * Learner progress, saved in this browser (localStorage).
+ * Shape: { paths: { <slug>: [lessonId, ...] }, last: <slug> }
+ * Swap these functions for API calls when progress moves to a backend.
+ */
+window.ACADEMY_PROGRESS = (function () {
+  const KEY = "la-progress-v1";
+  function load() {
+    try {
+      const d = JSON.parse(localStorage.getItem(KEY));
+      if (d && typeof d === "object" && d.paths) return d;
+    } catch (e) {}
+    return { paths: {}, last: null };
+  }
+  function save(d) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(d));
+    } catch (e) {}
+  }
+  return {
+    done(slug) {
+      return new Set(load().paths[slug] || []);
+    },
+    isDone(slug, id) {
+      return this.done(slug).has(id);
+    },
+    complete(slug, id) {
+      const d = load();
+      const list = d.paths[slug] || [];
+      if (list.indexOf(id) < 0) list.push(id);
+      d.paths[slug] = list;
+      d.last = slug;
+      save(d);
+    },
+    touch(slug) {
+      const d = load();
+      d.last = slug;
+      save(d);
+    },
+    last() {
+      return load().last;
+    },
+    reset(slug) {
+      const d = load();
+      if (slug) delete d.paths[slug];
+      else d.paths = {};
+      save(d);
+    }
+  };
+})();

@@ -581,9 +581,34 @@ kbd {
 .lesson-card-head .course-num { width: 34px; height: 34px; font-size: 13px; }
 .lesson-card-head p { margin: 0 0 2px; }
 .lesson-card-head h2 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+.lesson-body { display: grid; gap: 18px; margin: 20px 0; }
+.block-label { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; font-size: 13px; }
+.block-kind {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-ink); font-weight: 600;
+}
+.block-kind svg { width: 13px; height: 13px; }
+.block-title { color: var(--ink-2); font-weight: 500; }
+.block-caption { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+.media-frame { position: relative; overflow: hidden; border-radius: 16px; background: #111; aspect-ratio: 16 / 9; box-shadow: var(--shadow); }
+.media-frame video, .media-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.demo-frame { aspect-ratio: auto; height: min(var(--h, 600px), 75vh); background: repeating-linear-gradient(135deg, #fbfaf9 0 12px, #f7f4f2 12px 24px); border: 1.5px solid #ece6e1; }
+.demo-frame.is-live { background: #fff; }
+.demo-launch {
+  position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 4px;
+  width: 100%; border: 0; background: transparent; text-align: center;
+}
+.demo-launch strong { font-size: 16px; }
+.demo-launch:hover .slot-play { transform: scale(1.1); }
+.demo-tools { display: flex; justify-content: flex-end; margin-top: 8px; }
+.demo-tools .btn svg { width: 15px; height: 15px; }
+.demo-tools [hidden] { display: none; }
+.block-text { font-size: 15.5px; color: var(--ink-2); }
+.block-text h3 { margin: 0 0 6px; font-size: 16.5px; color: var(--ink); }
+.block-text p { margin: 0 0 10px; }
 .lesson-slot {
   display: grid; place-items: center; align-content: center; gap: 2px; text-align: center;
-  min-height: 220px; margin: 20px 0; padding: 20px; border-radius: 16px;
+  min-height: 200px; padding: 20px; border-radius: 16px;
   border: 1.5px dashed #e3ddd8;
   background: repeating-linear-gradient(135deg, #fbfaf9 0 12px, #f7f4f2 12px 24px);
 }
@@ -596,6 +621,33 @@ kbd {
 }
 .slot-play svg { width: 20px; height: 20px; margin-left: 2px; }
 .lesson-card:hover .slot-play { transform: scale(1.08); }
+.lesson-card.is-done { border-color: rgba(255, 61, 10, 0.22); }
+.lesson-status .pill svg { width: 12px; height: 12px; }
+.course-num.pop { animation: check-pop 0.6s var(--ease); }
+@keyframes check-pop {
+  0% { transform: scale(0.6); }
+  55% { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(255, 61, 10, 0.18); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 61, 10, 0); }
+}
+.lesson-toc a.active .course-num.done { background: var(--accent); color: #fff; }
+.stat-reset { margin-top: 12px; padding: 0; border: 0; background: none; color: var(--muted); font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; }
+.stat-reset:hover { color: var(--accent-ink); }
+.stat-reset[hidden] { display: none; }
+.stat-meter { transition: width 0.9s var(--ease); animation: none; }
+.path-complete { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 26px; scroll-margin-top: 100px; }
+.path-complete[hidden] { display: none; }
+.path-complete h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 30px; letter-spacing: -0.02em; }
+.path-complete p { margin: 2px 0 0; }
+.path-complete > div:nth-child(2) { flex: 1; min-width: 200px; }
+.path-complete-badge {
+  display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%;
+  background: linear-gradient(180deg, var(--accent-2), var(--accent)); color: #fff;
+  box-shadow: 0 12px 24px -10px rgba(255, 61, 10, 0.8); animation: check-pop 0.7s var(--ease);
+}
+.path-complete-badge svg { width: 24px; height: 24px; }
+.path-complete-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.pill-start { background: #fff; color: var(--ink); padding: 8px 14px 8px 16px; font-size: 13px; }
+.pill-start svg { width: 14px; height: 14px; }
 .lesson-card-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .lesson-card.pulse { animation: lesson-pulse 1.6s var(--ease) 0.5s; }
 @keyframes lesson-pulse {
