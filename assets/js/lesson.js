@@ -137,7 +137,7 @@
     '<nav class="crumbs reveal" aria-label="Breadcrumb"><a href="../index.html#home">Home</a><span>/</span><a href="../index.html#roles">Roles</a><span>/</span><span aria-current="page">' + esc(r.name) + "</span></nav>" +
     '<div class="lesson-hero-row">' +
     '<div class="lesson-hero-text">' +
-    '<span class="path-icon lg reveal">' + U.icon(r.icon) + "</span>" +
+    '<span class="path-icon lg reveal">' + U.pixel(r.icon) + "</span>" +
     '<p class="eyebrow reveal" style="--d:.05s">' + esc(r.eyebrow || r.subtitle || "Learning path") + "</p>" +
     '<h1 class="lesson-title reveal" style="--d:.1s">' + esc(r.name.toLowerCase()) + " path</h1>" +
     '<p class="section-sub reveal" style="--d:.15s">' + esc(r.description) + "</p>" +

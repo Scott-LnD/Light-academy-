@@ -59,7 +59,6 @@
     gsPill.className = "pill pill-start";
     gsPill.innerHTML = (gsState.started ? gsState.done + " of " + gsState.total + " done" : "Start here") + U.icon("arrow");
   }
-  document.getElementById("start-banner").classList.add("glow-track");
 
   /* ---------- Role grid ---------- */
   const grid = document.getElementById("role-grid");
@@ -68,13 +67,13 @@
   grid.innerHTML = A.roles
     .map(
       (r, i) =>
-        '<button class="role-card glass glow-track reveal" type="button" role="tab" id="tab-' + r.slug + '" aria-controls="path-panel" data-role="' + r.slug + '" style="--d:' + i * 0.07 + 's">' +
+        '<button class="role-card reveal" type="button" role="tab" id="tab-' + r.slug + '" aria-controls="path-panel" data-role="' + r.slug + '" style="--d:' + i * 0.07 + 's">' +
         (r.startHere ? '<span class="tag">Start here</span>' : "") +
-        '<span class="role-icon">' + U.icon(r.icon) + "</span>" +
+        '<span class="role-icon">' + U.pixel(r.icon) + "</span>" +
         '<span class="role-name">' + U.escape(r.name) + "</span>" +
         '<span class="role-sub">' + U.escape(r.subtitle) + "</span>" +
         '<span class="role-foot"><span>' + r.courses.length + " courses</span>" +
-        '<span class="role-view">View path ' + U.icon("arrow") + "</span></span>" +
+        '<span class="role-view text-link">View path ' + U.icon("arrow") + "</span></span>" +
         "</button>"
     )
     .join("");
@@ -86,7 +85,7 @@
     const pct = st.pct;
     return (
       '<div class="path-head">' +
-      '<span class="path-icon">' + U.icon(r.icon) + "</span>" +
+      '<span class="path-icon">' + U.pixel(r.icon) + "</span>" +
       '<div class="path-head-text"><h3>' + U.escape(r.name) + " path</h3><p>" + U.escape(r.description) + "</p></div>" +
       '<a class="btn btn-dark" href="' + U.lessonUrl(r.slug, done && firstOpen >= 0 ? firstOpen : null) + '">' + (st.complete ? "Review path" : done ? "Resume path" : "Start path") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>" +
       "</div>" +
@@ -180,8 +179,8 @@
       const progress = cs.started && !cs.complete;
       const label = cs.complete ? "Ready for assessment" : progress ? "In progress" : "Locked";
       return (
-        '<a class="cert-card tilt reveal" href="' + U.lessonUrl(c.role) + '" style="--d:' + (0.1 + i * 0.1) + 's">' +
-        '<span class="cert-icon">' + U.icon(cs.started ? "sparkles" : "lock") + "</span>" +
+        '<a class="cert-card reveal" href="' + U.lessonUrl(c.role) + '" style="--d:' + (0.1 + i * 0.1) + 's">' +
+        '<span class="cert-icon">' + U.pixel(cs.started ? "check" : "lock") + "</span>" +
         "<h3>" + U.escape(c.name) + "</h3>" +
         "<p>" + U.escape(c.description) + "</p>" +
         '<span class="pill ' + (cs.started ? "pill-live" : "pill-locked") + '">' + label + "</span>" +
@@ -190,30 +189,23 @@
     })
     .join("");
 
-  // Gentle 3D tilt on certification cards.
-  if (!reduceMotion && window.matchMedia("(hover: hover)").matches) {
-    document.querySelectorAll(".tilt").forEach((el) => {
-      el.addEventListener("pointermove", (e) => {
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = "perspective(800px) rotateX(" + -y * 6 + "deg) rotateY(" + x * 8 + "deg) translateY(-4px)";
-        el.style.setProperty("--mx", (x + 0.5) * 100 + "%");
-        el.style.setProperty("--my", (y + 0.5) * 100 + "%");
-      });
-      el.addEventListener("pointerleave", () => (el.style.transform = ""));
-    });
-  }
-
   /* ---------- Partners ---------- */
   document.getElementById("partner-grid").innerHTML = A.partners
     .map(
       (p, i) =>
-        '<a class="partner-card glass glow-track reveal" href="' + U.lessonUrl("partners") + '" style="--d:' + i * 0.1 + 's">' +
-        '<span class="partner-mark">' + U.logoMark() + "</span>" +
-        "<h3>" + U.escape(p.title) + "</h3><p>" + U.escape(p.description) + "</p></a>"
+        '<a class="partner-card reveal" href="' + U.lessonUrl("partners") + '" style="--d:' + i * 0.1 + 's">' +
+        '<span class="partner-mark">' + U.pixel(["check", "connect", "report"][i % 3]) + "</span>" +
+        "<h3>" + U.escape(p.title) + "</h3><p>" + U.escape(p.description) + "</p>" +
+        '<span class="text-link">Explore the track ' + U.icon("arrow") + "</span></a>"
     )
     .join("");
+
+  /* ---------- FAQ: keep one answer open at a time ---------- */
+  document.querySelectorAll(".faq details").forEach((d, i, all) => {
+    d.addEventListener("toggle", () => {
+      if (d.open) all.forEach((o) => o !== d && (o.open = false));
+    });
+  });
 
   /* ---------- Guided tour ---------- */
   const steps = [

@@ -77,14 +77,23 @@ Everything lives in `assets/js/data.js`; the comment at the top documents every 
 
 See `media/README.md` for file layout and size limits.
 
-## Look and motion
+## Look and feel
 
-Dark theme throughout. Light's orange is kept for main buttons and completion badges; hover highlights,
-the selected role, progress bars and focus states use a cyan, indigo, violet and pink glow (`--aurora` tokens
-at the top of `assets/css/styles.css`).
+Styled after light.inc on a dark `#212121` background: centered sections with a small orange uppercase
+label, a serif heading, a larger subheading and an orange text link; columns sit under a thin top line;
+the certifications section is a full-width black band. Lucide line icons in orange, the Light block logo
+(`logoMark()` in `assets/js/data.js`), no hover glows, and buttons that grow very slightly on hover.
 
+**Moving diagrams** (`assets/js/iso.js`): add `<div class="iso" data-iso="blocks"></div>` for the rising
+orange blocks, or `data-iso="ledger"` for the grid whose cells light up. They animate only while on
+screen and stay still for visitors who prefer reduced motion.
 
-Staggered hero headline, animated progress ring, scroll-reveal sections, sliding nav indicator
-with scroll spy, scroll progress bar, role-to-path panel transitions, cursor glows, magnetic
-buttons, tilting certification cards, and a spotlight walkthrough tour. All motion is turned off
-for visitors who prefer reduced motion.
+**Fonts** are set in one place, at the top of `assets/css/styles.css`:
+
+```css
+--font-display: "Newsreader", ...;  /* headings and the wordmark (serif) */
+--font-body: "DM Sans", ...;        /* text, labels, buttons */
+```
+
+To use Light's exact brand fonts, change those two lines and the Google Fonts `<link>` in `index.html`
+and `paths/*.html` (or add `@font-face` rules for self-hosted font files).
