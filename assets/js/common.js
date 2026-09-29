@@ -190,9 +190,16 @@
   /* ---------- Magnetic buttons and cursor glows ---------- */
   function setupPointerEffects() {
     if (reduceMotion || !window.matchMedia("(hover: hover)").matches) return;
+    // Colourful highlight that follows the cursor over cards.
     document.addEventListener("pointermove", (e) => {
-      const glow = e.target.closest && e.target.closest(".glow-track");
+      const glow = e.target.closest && e.target.closest(".glow-track, .glass");
       if (glow) {
+        if (!glow.querySelector(":scope > .glow-border")) {
+          const b = document.createElement("span");
+          b.className = "glow-border";
+          b.setAttribute("aria-hidden", "true");
+          glow.appendChild(b);
+        }
         const r = glow.getBoundingClientRect();
         glow.style.setProperty("--mx", e.clientX - r.left + "px");
         glow.style.setProperty("--my", e.clientY - r.top + "px");

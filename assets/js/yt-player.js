@@ -8,6 +8,7 @@
  *  - Our own cover shows while paused or finished, hiding YouTube's
  *    "more videos" suggestions.
  *  - Full screen enlarges this player, not YouTube's.
+ *  - Keyboard shortcuts (see onKey below) also work for uploaded MP4s.
  *
  * The YouTube script only loads when a learner presses play.
  * Requirements on the YouTube side: the video must be Public or Unlisted,
@@ -18,6 +19,62 @@ window.ACADEMY_YT = (function () {
   const esc = U.escape;
   const players = new Set();
   let apiPromise;
+  // The video the keyboard shortcuts control: a YouTube Player or a <video>.
+  let active = null;
+
+  // Small on-screen label, e.g. "+5s" or "Volume 60%".
+  function osd(container, icon, text) {
+    let el = container.querySelector(":scope > .v-osd");
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "v-osd";
+      el.setAttribute("aria-live", "polite");
+      container.appendChild(el);
+    }
+    el.innerHTML = U.icon(icon) + "<span>" + esc(text) + "</span>";
+    el.classList.remove("show");
+    void el.offsetWidth;
+    el.classList.add("show");
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove("show"), 900);
+  }
+
+  function pauseNative(except) {
+    document.querySelectorAll(".lesson-body video").forEach((v) => v !== except && !v.paused && v.pause());
+  }
+
+  // Keyboard actions for uploaded MP4 videos, matching the YouTube player.
+  const Native = {
+    seekBy(v, sec) {
+      const d = isFinite(v.duration) ? v.duration : Infinity;
+      v.currentTime = Math.min(d, Math.max(0, v.currentTime + sec));
+      osd(v.parentElement, sec < 0 ? "rewind" : "forward", (sec < 0 ? "" : "+") + sec + "s");
+    },
+    volumeBy(v, delta) {
+      const now = v.muted ? 0 : Math.round(v.volume * 100);
+      const n = Math.max(0, Math.min(100, Math.round((now + delta) / 10) * 10));
+      v.volume = n / 100;
+      v.muted = n === 0;
+      osd(v.parentElement, n === 0 ? "mute" : "volume", n === 0 ? "Muted" : "Volume " + n + "%");
+    },
+    toggle(v) {
+      v.paused ? v.play() : v.pause();
+    },
+    toggleMute(v) {
+      v.muted = !v.muted;
+      osd(v.parentElement, v.muted ? "mute" : "volume", v.muted ? "Muted" : "Volume " + Math.round(v.volume * 100) + "%");
+    },
+    toggleFull(v) {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (v.requestFullscreen) v.requestFullscreen();
+      else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    }
+  };
+
+  function inView(el) {
+    const r = el.getBoundingClientRect();
+    return r.bottom > 60 && r.top < window.innerHeight - 40;
+  }
 
   // Returns the 11-character video id for any common YouTube link, or null.
   function parseId(src) {
@@ -117,6 +174,7 @@ window.ACADEMY_YT = (function () {
 
   Player.prototype.load = function () {
     if (this.yt || this.loading) return;
+    active = this;
     this.loading = true;
     this.setState("loading");
     const vars = {
@@ -161,6 +219,8 @@ window.ACADEMY_YT = (function () {
     // -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued
     if (s === 1) {
       players.forEach((p) => p !== this && p.pause());
+      pauseNative(null);
+      active = this;
       this.setState("playing");
       this.q(".yt-dur").textContent = fmt(this.yt.getDuration());
       this.tick();
@@ -228,14 +288,34 @@ window.ACADEMY_YT = (function () {
   };
   Player.prototype.seekBy = function (sec) {
     if (!this.ready) return;
-    this.yt.seekTo(Math.max(0, this.yt.getCurrentTime() + sec), true);
+    const d = this.yt.getDuration() || Infinity;
+    this.yt.seekTo(Math.min(d, Math.max(0, this.yt.getCurrentTime() + sec)), true);
+    osd(this.el, sec < 0 ? "rewind" : "forward", (sec < 0 ? "" : "+") + sec + "s");
+  };
+  Player.prototype.started = function () {
+    return this.ready && this.el.dataset.state !== "idle" && this.el.dataset.state !== "error";
+  };
+  Player.prototype.syncMute = function (muted) {
+    this.q(".yt-mute").innerHTML = U.icon(muted ? "mute" : "volume");
+    this.q(".yt-mute").setAttribute("aria-label", muted ? "Unmute" : "Mute");
   };
   Player.prototype.toggleMute = function () {
     if (!this.ready) return;
     const muted = this.yt.isMuted();
     muted ? this.yt.unMute() : this.yt.mute();
-    this.q(".yt-mute").innerHTML = U.icon(muted ? "volume" : "mute");
-    this.q(".yt-mute").setAttribute("aria-label", muted ? "Mute" : "Unmute");
+    this.syncMute(!muted);
+    osd(this.el, !muted ? "mute" : "volume", !muted ? "Muted" : "Volume " + this.yt.getVolume() + "%");
+  };
+  // Step the volume by `delta` (0-100 scale) and show the new level.
+  Player.prototype.volumeBy = function (delta) {
+    if (!this.ready) return;
+    const now = this.yt.isMuted() ? 0 : this.yt.getVolume();
+    const v = Math.max(0, Math.min(100, Math.round((now + delta) / 10) * 10));
+    this.yt.setVolume(v);
+    if (v === 0) this.yt.mute();
+    else this.yt.unMute();
+    this.syncMute(v === 0);
+    osd(this.el, v === 0 ? "mute" : "volume", v === 0 ? "Muted" : "Volume " + v + "%");
   };
   Player.prototype.cycleSpeed = function () {
     if (!this.ready) return;
@@ -268,7 +348,10 @@ window.ACADEMY_YT = (function () {
           if (img.naturalWidth && img.naturalWidth < 200) img.src = img.dataset.fallback;
         };
         img.addEventListener("load", swap);
-        img.addEventListener("error", () => (img.src = img.dataset.fallback), { once: true });
+        img.addEventListener("error", () => {
+          if (img.dataset.fallback && img.src !== img.dataset.fallback) img.src = img.dataset.fallback;
+          else img.hidden = true;
+        });
         if (img.complete) swap();
       }
       const fs = document.documentElement;
@@ -307,19 +390,78 @@ window.ACADEMY_YT = (function () {
       get(e.target.closest(".yt-player")).seeking = false;
     });
 
-    root.addEventListener("keydown", (e) => {
-      const el = e.target.closest && e.target.closest(".yt-player");
-      if (!el || e.target.tagName === "BUTTON" || e.target.tagName === "INPUT") return;
-      const p = get(el);
-      const k = e.key.toLowerCase();
-      if (k === " " || k === "k") p.toggle();
-      else if (k === "arrowright" || k === "l") p.seekBy(k === "l" ? 10 : 5);
-      else if (k === "arrowleft" || k === "j") p.seekBy(k === "j" ? -10 : -5);
-      else if (k === "m") p.toggleMute();
-      else if (k === "f") p.toggleFull();
-      else return;
-      e.preventDefault();
+    // Uploaded MP4s become the active video when played or clicked.
+    root.querySelectorAll(".lesson-body video").forEach((v) => {
+      v.addEventListener("play", () => {
+        players.forEach((p) => p.pause());
+        pauseNative(v);
+        active = v;
+      });
+      v.addEventListener("pointerdown", () => (active = v));
     });
+    root.addEventListener("pointerdown", (e) => {
+      const el = e.target.closest(".yt-player");
+      if (el) active = get(el);
+    });
+
+    if (!keysBound) {
+      keysBound = true;
+      document.addEventListener("keydown", onKey);
+    }
+  }
+
+  /*
+   * Keyboard shortcuts for lesson videos, anywhere on the page:
+   *   Left / Right   back / forward 5 seconds
+   *   Up / Down      volume up / down 10%
+   *   Space or K     play / pause (when the video has focus)
+   *   J / L          back / forward 10 seconds
+   *   M              mute        F  full screen
+   * They apply to the focused video, otherwise to the last video played
+   * while it is on screen. Anywhere else the arrow keys scroll as normal.
+   */
+  let keysBound = false;
+  function onKey(e) {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    const t = e.target;
+    const typing = t.isContentEditable || /^(TEXTAREA|SELECT)$/.test(t.tagName) || (t.tagName === "INPUT" && !t.classList.contains("yt-seek"));
+    if (typing || document.querySelector(".tour-overlay, .search-overlay.open")) return;
+
+    // Which video? The one with focus, else the active one if it is on screen.
+    let target = null;
+    const focusedYt = t.closest && t.closest(".yt-player");
+    if (focusedYt) target = get(focusedYt);
+    else if (t.tagName === "VIDEO" && t.closest(".lesson-body")) target = t;
+    const focused = !!target;
+    if (!target && active) {
+      const el = active instanceof Player ? active.el : active;
+      const started = active instanceof Player ? active.started() : active.currentTime > 0 || !active.paused;
+      if (document.contains(el) && started && inView(el)) target = active;
+    }
+    if (!target) return;
+
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    // Let a focused control button handle its own Space / Enter press.
+    if ((k === " " || k === "Enter") && t.tagName === "BUTTON") return;
+    const yt = target instanceof Player;
+    const act = {
+      ArrowLeft: () => (yt ? target.seekBy(-5) : Native.seekBy(target, -5)),
+      ArrowRight: () => (yt ? target.seekBy(5) : Native.seekBy(target, 5)),
+      ArrowUp: () => (yt ? target.volumeBy(10) : Native.volumeBy(target, 10)),
+      ArrowDown: () => (yt ? target.volumeBy(-10) : Native.volumeBy(target, -10)),
+      j: () => (yt ? target.seekBy(-10) : Native.seekBy(target, -10)),
+      l: () => (yt ? target.seekBy(10) : Native.seekBy(target, 10)),
+      m: () => (yt ? target.toggleMute() : Native.toggleMute(target)),
+      f: () => (yt ? target.toggleFull() : Native.toggleFull(target))
+    };
+    if (focused) {
+      act[" "] = act.k = () => (yt ? target.toggle() : Native.toggle(target));
+    }
+    if (!act[k]) return;
+    // A YouTube video that has not been started yet only responds to play.
+    if (yt && !target.ready && k !== " " && k !== "k") return;
+    e.preventDefault();
+    act[k]();
   }
 
   return { parseId: parseId, markup: markup, init: init };

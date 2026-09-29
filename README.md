@@ -65,6 +65,10 @@ Everything lives in `assets/js/data.js`; the comment at the top documents every 
     YouTube's title, logo, "Watch on YouTube" link and suggested videos are hidden or covered, so learners
     stay on the site. The YouTube video must be **Public or Unlisted** with **Allow embedding** turned on.
     A `?t=90` on the link starts the video at 90 seconds.
+  - **Keyboard, for every lesson video (YouTube and MP4):** Left / Right skip back / forward 5 seconds,
+    Up / Down change the volume by 10%, J / L skip 10 seconds, M mutes, F goes full screen, and Space or K
+    plays / pauses when the video has focus. The keys control the video you last played while it is on
+    screen; elsewhere the arrow keys scroll the page as normal.
   - `{ type: "demo", src, title, height }`: an Arcade, Storylane, Navattic or Supademo link, or a local page in `media/demos/`. It loads when the learner clicks it and can go full screen.
   - `{ type: "text", html, title }`: notes, key points, steps.
   Lessons without `content` show a video and a demo placeholder.
@@ -73,7 +77,12 @@ Everything lives in `assets/js/data.js`; the comment at the top documents every 
 
 See `media/README.md` for file layout and size limits.
 
-## Motion
+## Look and motion
+
+Dark theme throughout. Light's orange is kept for main buttons and completion badges; hover highlights,
+the selected role, progress bars and focus states use a cyan, indigo, violet and pink glow (`--aurora` tokens
+at the top of `assets/css/styles.css`).
+
 
 Staggered hero headline, animated progress ring, scroll-reveal sections, sliding nav indicator
 with scroll spy, scroll progress bar, role-to-path panel transitions, cursor glows, magnetic
