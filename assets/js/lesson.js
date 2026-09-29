@@ -54,6 +54,18 @@
 
   const BLOCKS = {
     video(b) {
+      // YouTube links get the in-page player (assets/js/yt-player.js), so
+      // learners stay on the site instead of being sent to youtube.com.
+      const ytId = window.ACADEMY_YT && window.ACADEMY_YT.parseId(b.src);
+      if (ytId) {
+        const yb = Object.assign({}, b, b.poster ? { poster: mediaUrl(b.poster) } : {});
+        return (
+          '<div class="block block-video">' + blockHead("Video", "play", b.title) +
+          '<div class="media-frame">' + window.ACADEMY_YT.markup(yb, ytId) + "</div>" +
+          (b.caption ? '<p class="block-caption">' + esc(b.caption) + "</p>" : "") +
+          "</div>"
+        );
+      }
       const embed = embedUrl(b.src);
       const player = embed
         ? '<iframe src="' + esc(embed) + '" title="' + esc(b.title || "Lesson video") + '" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>'
@@ -172,6 +184,7 @@
     "</div></section>";
 
   U.fillIcons(root);
+  if (window.ACADEMY_YT) window.ACADEMY_YT.init(root);
   const cards = Array.from(root.querySelectorAll(".lesson-card"));
   const tocLinks = Array.from(root.querySelectorAll(".lesson-toc a"));
 

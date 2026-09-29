@@ -61,6 +61,10 @@ Everything lives in `assets/js/data.js`; the comment at the top documents every 
   anyone's check marks. Set an explicit `id` before renaming a lesson.
 - **Add media:** give the lesson a `content` list of blocks, shown top to bottom:
   - `{ type: "video", src, poster, title, caption }`: an MP4 in `media/videos/`, or a YouTube, Vimeo or Loom link.
+    YouTube links play inside the lesson box in Light Academy's own player (`assets/js/yt-player.js`):
+    YouTube's title, logo, "Watch on YouTube" link and suggested videos are hidden or covered, so learners
+    stay on the site. The YouTube video must be **Public or Unlisted** with **Allow embedding** turned on.
+    A `?t=90` on the link starts the video at 90 seconds.
   - `{ type: "demo", src, title, height }`: an Arcade, Storylane, Navattic or Supademo link, or a local page in `media/demos/`. It loads when the learner clicks it and can go full screen.
   - `{ type: "text", html, title }`: notes, key points, steps.
   Lessons without `content` show a video and a demo placeholder.

@@ -18,7 +18,8 @@
  *
  * CONTENT BLOCKS (see assets/js/lesson.js to add new types)
  *   { type: "video", src: "media/videos/admin/approvals.mp4", poster: "...", title: "...", caption: "..." }
- *       src can also be a YouTube, Vimeo or Loom link.
+ *       src can also be a YouTube, Vimeo or Loom link. YouTube links play
+ *       inside the lesson with Light Academy's own controls (no youtube.com).
  *   { type: "demo", src: "https://app.arcade.software/share/...", title: "...", height: 640 }
  *       Any embeddable interactive demo (Arcade, Storylane, Navattic, Supademo)
  *       or a local page such as "media/demos/admin/approvals/index.html".
@@ -238,7 +239,11 @@ window.ACADEMY_UTIL = {
       close: '<path d="M6 6l12 12M18 6 6 18"/>',
       compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
       cursor: '<path d="M5 3l14 7-6 2-2 6z"/><path d="m13 12 5 5"/>',
-      expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'
+      expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+      pause: '<path d="M8 5v14M16 5v14"/>',
+      volume: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+      mute: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="m17 9 5 6M22 9l-5 6"/>',
+      replay: '<path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/>'
     }[name] || "";
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + "</svg>";
   },
