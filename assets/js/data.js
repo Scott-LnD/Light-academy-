@@ -222,37 +222,70 @@ window.ACADEMY_UTIL = {
     }
     return A.roles.find((r) => r.slug === slug) || A.extraPaths.find((r) => r.slug === slug);
   },
+  // Minimal line icons (Lucide, ISC licence), 24px grid.
   icon(name) {
+    const speaker = '<path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6a1.4 1.4 0 0 1-1 .4H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/>';
     const p = {
-      sliders: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
-      book: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/><path d="m14.5 11 1.5 1.5 3-3"/>',
-      receipt: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
-      coins: '<path d="M4 15c2 0 3-1 5-1h3a2 2 0 0 1 0 4H9"/><path d="M4 20h9l6-4a2 2 0 0 0-2-3l-4 2"/><circle cx="15" cy="7" r="3"/><path d="M7 5.5 9 4l2 1.5"/>',
-      card: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/>',
-      chart: '<path d="M4 4v16h16"/><path d="m7 15 4-4 3 3 5-6"/>',
-      spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
-      sparkles: '<path d="M10 3 11.8 8.2 17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8z"/><path d="M18 14v6M15 17h6"/>',
-      lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
-      check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
-      arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
-      back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
-      search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
-      play: '<path d="M8 5v14l11-7z"/>',
-      close: '<path d="M6 6l12 12M18 6 6 18"/>',
-      compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
-      cursor: '<path d="M5 3l14 7-6 2-2 6z"/><path d="m13 12 5 5"/>',
-      expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
-      pause: '<path d="M8 5v14M16 5v14"/>',
-      volume: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
-      mute: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="m17 9 5 6M22 9l-5 6"/>',
-      replay: '<path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/>',
-      rewind: '<path d="M11 7 5 12l6 5z"/><path d="M19 7l-6 5 6 5z"/>',
-      forward: '<path d="m13 7 6 5-6 5z"/><path d="m5 7 6 5-6 5z"/>'
+      sliders: '<path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/>',
+      book: '<path d="M12 21V7"/><path d="m16 12 2 2 4-4"/><path d="M22 6V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4 4 4 0 0 0-4-4H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6a1 1 0 0 0 1-1v-1.3"/>',
+      receipt: '<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/>',
+      coins: '<path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/>',
+      card: '<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>',
+      chart: '<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>',
+      spark: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+      sparkles: '<path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/><path d="M20 3v4M22 5h-4"/>',
+      award: '<path d="m15.48 12.89 1.51 8.53a.5.5 0 0 1-.81.47l-3.58-2.69a1 1 0 0 0-1.2 0l-3.59 2.69a.5.5 0 0 1-.81-.47l1.51-8.53"/><circle cx="12" cy="8" r="6"/>',
+      lock: '<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+      check: '<path d="M20 6 9 17l-5-5"/>',
+      arrow: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+      back: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+      search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+      play: '<path d="M6 3.9a1 1 0 0 1 1.5-.86l12 7.24a1 1 0 0 1 0 1.72l-12 7.24A1 1 0 0 1 6 18.1z"/>',
+      close: '<path d="M18 6 6 18M6 6l12 12"/>',
+      compass: '<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/>',
+      cursor: '<path d="M14 4.1 12 6M5.1 8l-2.9-.8M6 12l-1.9 2M7.2 2.2 8 5.1"/><path d="M9.04 9.69a.5.5 0 0 1 .65-.65l11 4.5a.5.5 0 0 1-.07.95l-4.35 1.04a1 1 0 0 0-.74.74l-1.04 4.35a.5.5 0 0 1-.95.07z"/>',
+      expand: '<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>',
+      pause: '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
+      volume: speaker + '<path d="M16 9a5 5 0 0 1 0 6M19.36 18.36a9 9 0 0 0 0-12.72"/>',
+      mute: speaker + '<path d="m22 9-6 6M16 9l6 6"/>',
+      replay: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+      rewind: '<path d="m11 19-9-7 9-7z"/><path d="m22 19-9-7 9-7z"/>',
+      forward: '<path d="m13 19 9-7-9-7z"/><path d="m2 19 9-7-9-7z"/>'
     }[name] || "";
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + "</svg>";
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + "</svg>";
   },
+  // Pixel icons in the style of light.inc ("#" = filled pixel). Used on cards and headers;
+  // interface controls keep the line icons above. Unknown names fall back to icon().
+  pixel(name) {
+    const P = {
+      movein: ["....#..#", ".....#.#", "######.#", ".....#.#", "....#..#"],
+      connect: ["###....", "#.#....", "#####..", "..#.#..", "..###.."],
+      agents: ["#.#...#", "...#...", ".#...#.", "#..#...", "...#.#."],
+      report: ["#####", "#....", "####.", "#....", "#####"],
+      check: ["......#", ".....#.", "#...#..", ".#.#...", "..#...."],
+      frame: ["#######", "#.....#", "#.###.#", "#.###.#", "#.###.#", "#.....#", "#######"],
+      lock: ["..###..", ".#...#.", ".#...#.", "#######", "###.###", "###.###", "#######"],
+      sliders: ["##.####", ".......", "####.##", ".......", "#.#####"],
+      book: ["#######", "#..#..#", "#######", "#..#..#", "#######"],
+      receipt: ["######", "#....#", "#.##.#", "#....#", "#.##.#", "#....#", "#.#.#."],
+      coins: [".####.", "......", "######", "......", ".####."],
+      card: ["#######", "#######", "#.....#", "#.##..#", "#######"],
+      chart: ["....#", "..#.#", "..#.#", "#.#.#", "#.#.#"]
+    };
+    const alias = { spark: "movein", compass: "movein", sparkles: "agents", award: "check" };
+    const rows = P[name] || P[alias[name]];
+    if (!rows) return this.icon(name);
+    const w = Math.max(...rows.map((r) => r.length));
+    const h = rows.length;
+    let rects = "";
+    rows.forEach((r, y) => {
+      for (let x = 0; x < r.length; x++) if (r[x] === "#") rects += '<rect x="' + x + '" y="' + y + '" width="1" height="1"/>';
+    });
+    return '<svg class="pixel-icon" viewBox="-0.5 -0.5 ' + (w + 1) + " " + (h + 1) + '" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true">' + rects + "</svg>";
+  },
+  // The Light mark: three blocks on a 3 x 3 grid, drawn in the current text colour.
   logoMark() {
-    return '<svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#111"/><path fill="#fff" d="M7 7h7v11h11v7H7z"/><path fill="#fff" d="M18 7h7v7h-7z"/></svg>';
+    return '<svg class="logo-mark" viewBox="0 0 3 3" aria-hidden="true" shape-rendering="crispEdges"><rect x="0" y="0" width="1" height="2"/><rect x="2" y="0" width="1" height="1"/><rect x="1" y="2" width="2" height="1"/></svg>';
   },
   slugify(s) {
     return String(s).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");

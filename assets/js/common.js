@@ -1,7 +1,7 @@
 /*
  * Shared chrome and motion for every Light Academy page:
- * header, footer, course search, scroll progress, reveal-on-scroll,
- * magnetic buttons and the guided tour engine.
+ * header, footer, course search, scroll progress, reveal-on-scroll
+ * and the guided tour engine.
  */
 (function () {
   const A = window.ACADEMY;
@@ -27,17 +27,19 @@
     ];
     el.innerHTML =
       '<div class="container header-inner">' +
-      '<a class="brand" href="' + homeLink("#home") + '" aria-label="Light Academy home">' + U.logoMark() +
-      '<span class="brand-text">Light <span>Academy</span></span></a>' +
       '<button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>' +
       '<nav class="nav" aria-label="Primary">' +
       '<span class="nav-indicator" aria-hidden="true"></span>' +
       links.map(([label, hash]) => '<a class="nav-link" data-section="' + hash.slice(1) + '" href="' + homeLink(hash) + '">' + label + "</a>").join("") +
       "</nav>" +
+      '<a class="brand" href="' + homeLink("#home") + '" aria-label="Light Academy home">' + U.logoMark() +
+      '<span class="brand-text">Light <span>Academy</span></span></a>' +
+      '<div class="header-actions">' +
       '<button class="search-trigger" type="button" data-tour="search">' + U.icon("search") + '<span>Search courses</span><kbd>/</kbd></button>' +
       '<div class="avatar-wrap">' +
       '<button class="avatar" type="button" aria-haspopup="true" aria-expanded="false">' + A.learner.initials + "</button>" +
-      '<div class="avatar-menu glass" role="menu"></div>' +
+      '<div class="avatar-menu" role="menu"></div>' +
+      "</div>" +
       "</div>" +
       "</div>";
 
@@ -133,7 +135,8 @@
     if (!el) return;
     el.innerHTML =
       '<div class="container footer-inner">' +
-      '<p><span class="footer-brand">Light</span> <span class="accent-text">Academy</span>, the customer learning academy for Light.</p>' +
+      '<p class="footer-brand">' + U.logoMark() + "Light Academy</p>" +
+      "<p>The customer learning academy for Light.</p>" +
       '<p class="muted">Concept mockup · not a live product.</p>' +
       "</div>";
   }
@@ -143,7 +146,10 @@
     (root || document).querySelectorAll("[data-icon]").forEach((n) => {
       if (!n.firstChild) n.innerHTML = U.icon(n.dataset.icon);
     });
-    (root || document).querySelectorAll(".mini-mark:empty, .progress-card-mark:empty, .start-banner-bigmark:empty").forEach((n) => {
+    (root || document).querySelectorAll("[data-pixel]:empty").forEach((n) => {
+      n.innerHTML = U.pixel(n.dataset.pixel);
+    });
+    (root || document).querySelectorAll(".mini-mark:empty").forEach((n) => {
       n.innerHTML = U.logoMark();
     });
   }
@@ -185,35 +191,6 @@
     update();
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
-  }
-
-  /* ---------- Magnetic buttons and cursor glows ---------- */
-  function setupPointerEffects() {
-    if (reduceMotion || !window.matchMedia("(hover: hover)").matches) return;
-    // Colourful highlight that follows the cursor over cards.
-    document.addEventListener("pointermove", (e) => {
-      const glow = e.target.closest && e.target.closest(".glow-track, .glass");
-      if (glow) {
-        if (!glow.querySelector(":scope > .glow-border")) {
-          const b = document.createElement("span");
-          b.className = "glow-border";
-          b.setAttribute("aria-hidden", "true");
-          glow.appendChild(b);
-        }
-        const r = glow.getBoundingClientRect();
-        glow.style.setProperty("--mx", e.clientX - r.left + "px");
-        glow.style.setProperty("--my", e.clientY - r.top + "px");
-      }
-    });
-    document.querySelectorAll(".magnetic").forEach((btn) => {
-      btn.addEventListener("pointermove", (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width / 2) * 0.18;
-        const y = (e.clientY - r.top - r.height / 2) * 0.28;
-        btn.style.transform = "translate(" + x + "px," + y + "px)";
-      });
-      btn.addEventListener("pointerleave", () => (btn.style.transform = ""));
-    });
   }
 
   /* ---------- Course search (Cmd/Ctrl+K or /) ---------- */
@@ -413,7 +390,6 @@
   setupScrollProgress();
   document.addEventListener("DOMContentLoaded", () => {
     observeReveals();
-    setupPointerEffects();
   });
   window.ACADEMY_UTIL.openSearch = openSearch;
 })();
