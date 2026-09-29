@@ -46,7 +46,9 @@ window.ACADEMY = {
     title: "get started with light",
     summary: "Navigate Light, how the ledger works, your first login",
     courses: [
-      { title: "Navigating Light", time: "10 min" },
+      { title: "Navigating Light", time: "10 min", content: [
+          { type: "video", src: "https://youtu.be/2bvYsL-w0lk", title: "Navigating Light" }
+      ] },
       { title: "How the ledger works", time: "15 min" },
       { title: "Your first login", time: "5 min" }
     ]
