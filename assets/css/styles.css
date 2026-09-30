@@ -257,18 +257,18 @@ kbd {
 .path-icon svg { width: 19px; height: 19px; }
 
 /* ---------- Role grid ---------- */
-.role-grid, .partner-grid, .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 40px; row-gap: 48px; }
+.role-grid, .partner-grid, .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 32px; row-gap: 36px; }
 .role-card, .partner-card, .cert-card {
   position: relative; display: flex; flex-direction: column; align-items: flex-start; text-align: left;
-  padding: 26px 0 0; border: 0; border-top: 1px solid var(--line-strong); border-radius: 0; background: none;
+  padding: 20px 0 0; border: 0; border-top: 1px solid var(--line-strong); border-radius: 0; background: none;
   transition: border-color 0.2s, opacity 0.6s var(--ease), translate 0.6s var(--ease);
 }
 .role-card.selected { border-top-color: var(--accent); box-shadow: inset 0 1px 0 var(--accent); }
-.role-card .tag { position: absolute; top: 26px; right: 0; color: var(--muted); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; }
-.role-name, .partner-card h3, .cert-card h3 { margin: 18px 0 8px; font-family: var(--font-display); font-size: 26px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
-.role-sub, .partner-card p, .cert-card p { margin: 0 0 18px; color: var(--muted); font-size: 14.5px; line-height: 1.55; }
-.role-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; margin-top: auto; color: var(--faint); font-size: 13.5px; }
-.role-view { font-size: 14.5px; }
+.role-card .tag { position: absolute; top: 20px; right: 0; color: var(--muted); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+.role-name, .partner-card h3, .cert-card h3 { margin: 14px 0 6px; font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
+.role-sub, .partner-card p, .cert-card p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.role-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; margin-top: auto; color: var(--faint); font-size: 12.5px; }
+.role-view { font-size: 13.5px; }
 .role-card.selected .role-name { color: var(--ink); }
 
 /* ---------- Path panel ---------- */
@@ -314,24 +314,24 @@ kbd {
 
 /* ---------- Partners ---------- */
 .partner-grid { margin-bottom: 56px; }
-.partner-card .text-link { margin-top: auto; }
+.partner-card .text-link { margin-top: auto; font-size: 13.5px; }
 .section-cta { display: flex; justify-content: center; }
 
 /* ---------- Pixel icons ---------- */
 .pixel-icon { display: block; width: auto; height: 20px; color: var(--accent); }
-.role-icon .pixel-icon, .cert-icon .pixel-icon, .partner-mark .pixel-icon, .step-icon .pixel-icon { height: 20px; }
+.role-icon .pixel-icon, .cert-icon .pixel-icon, .partner-mark .pixel-icon, .step-icon .pixel-icon { height: 16px; }
 .path-icon .pixel-icon { height: 16px; }
 .path-icon.lg .pixel-icon { height: 20px; }
 
 /* ---------- How it works: columns with thin dividers ---------- */
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line-strong); }
-.step { display: flex; flex-direction: column; align-items: flex-start; padding: 28px 28px 4px; border-left: 1px solid var(--line); }
+.step { display: flex; flex-direction: column; align-items: flex-start; padding: 22px 22px 2px; border-left: 1px solid var(--line); }
 .step:first-child { padding-left: 0; border-left: 0; }
 .step:last-child { padding-right: 0; }
-.step-icon { display: block; height: 20px; margin-bottom: 22px; }
-.step h3 { margin: 0 0 10px; font-family: var(--font-display); font-size: 24px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
-.step p { margin: 0 0 18px; color: var(--muted); font-size: 14.5px; line-height: 1.6; }
-.step .text-link { margin-top: auto; }
+.step-icon { display: block; height: 16px; margin-bottom: 16px; }
+.step h3 { margin: 0 0 8px; font-family: var(--font-display); font-size: 21px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
+.step p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+.step .text-link { margin-top: auto; font-size: 13.5px; }
 
 /* ---------- FAQ ---------- */
 .faq { max-width: 880px; }
