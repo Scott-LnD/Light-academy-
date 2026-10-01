@@ -36,9 +36,11 @@
       '<span class="brand-text">Light <span>Academy</span></span></a>' +
       '<div class="header-actions">' +
       '<button class="search-trigger" type="button" data-tour="search">' + U.icon("search") + '<span>Search courses</span><kbd>/</kbd></button>' +
-      '<div class="avatar-wrap">' +
-      '<button class="avatar" type="button" aria-haspopup="true" aria-expanded="false">' + A.learner.initials + "</button>" +
-      '<div class="avatar-menu" role="menu"></div>' +
+      '<div class="progress-wrap">' +
+      '<button class="progress-btn" type="button" aria-haspopup="true" aria-expanded="false">' +
+      '<svg class="mini-ring" viewBox="0 0 20 20" aria-hidden="true"><circle class="mr-track" cx="10" cy="10" r="8"/><circle class="mr-fill" cx="10" cy="10" r="8"/></svg>' +
+      '<span class="progress-btn-pct">0%</span></button>' +
+      '<div class="progress-menu" role="menu"></div>' +
       "</div>" +
       "</div>" +
       "</div>";
@@ -56,27 +58,51 @@
       })
     );
 
-    // Avatar menu: quick resume.
+    // Progress button: a small ring that fills to the learner's percentage.
+    // It opens a panel with the current path, a link to continue and certifications.
     const feat = U.featuredPath();
     const role = feat.role;
-    const menu = el.querySelector(".avatar-menu");
-    menu.innerHTML =
-      '<p class="avatar-name">' + U.escape(A.learner.name) + "</p>" +
-      '<p class="avatar-meta">' + U.escape(role.name) + " path · " + feat.pct + "%</p>" +
-      '<div class="avatar-bar"><span style="width:' + feat.pct + '%"></span></div>' +
-      (feat.nextIndex >= 0
-        ? '<a role="menuitem" href="' + U.lessonUrl(role.slug, feat.nextIndex) + '">' + (feat.started ? "Resume: " : "Start: ") + U.escape(role.courses[feat.nextIndex].title) + "</a>"
+    const P = window.ACADEMY_PROGRESS;
+    const lastId = P.last() === role.slug ? P.lastLesson(role.slug) : null;
+    const lastIdx = lastId ? role.courses.findIndex((c) => c.id === lastId) : -1;
+    const goIdx = lastIdx >= 0 && !feat.doneIds.has(lastId) ? lastIdx : feat.nextIndex;
+    const btn = el.querySelector(".progress-btn");
+    const wrap = el.querySelector(".progress-wrap");
+    btn.setAttribute("aria-label", "Your progress: " + role.name + " path, " + feat.pct + "% complete");
+    btn.querySelector(".progress-btn-pct").textContent = feat.pct + "%";
+    const ring = btn.querySelector(".mr-fill");
+    const circ = 2 * Math.PI * 8;
+    ring.style.strokeDasharray = String(circ);
+    ring.style.strokeDashoffset = String(circ);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => (ring.style.strokeDashoffset = String(circ * (1 - feat.pct / 100))))
+    );
+    el.querySelector(".progress-menu").innerHTML =
+      '<p class="pm-label">Your progress</p>' +
+      '<div class="pm-row"><span class="pm-path">' + U.escape(role.name) + ' path</span><span class="pm-pct">' + feat.pct + "%</span></div>" +
+      '<div class="pm-bar"><span style="--w:' + feat.pct + '%"></span></div>' +
+      '<p class="pm-meta">' + feat.done + " of " + feat.total + " lessons complete</p>" +
+      (goIdx >= 0
+        ? '<a class="pm-link" role="menuitem" href="' + U.lessonUrl(role.slug, goIdx) + '"><span><span class="pm-kicker">' +
+          (feat.started || lastIdx > 0 ? "Continue" : "Start") + "</span>" + U.escape(role.courses[goIdx].title) + "</span>" + U.icon("arrow") + "</a>"
         : "") +
-      '<a role="menuitem" href="' + homeLink("#certifications") + '">My certifications</a>';
-    const avatar = el.querySelector(".avatar");
-    avatar.addEventListener("click", (e) => {
+      '<a class="pm-link" role="menuitem" href="' + homeLink("#certifications") + '"><span>My certifications</span>' + U.icon("arrow") + "</a>";
+    btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const open = el.querySelector(".avatar-wrap").classList.toggle("open");
-      avatar.setAttribute("aria-expanded", String(open));
+      const open = wrap.classList.toggle("open");
+      btn.setAttribute("aria-expanded", String(open));
     });
-    document.addEventListener("click", () => {
-      el.querySelector(".avatar-wrap").classList.remove("open");
-      avatar.setAttribute("aria-expanded", "false");
+    document.addEventListener("click", (e) => {
+      if (wrap.contains(e.target)) return;
+      wrap.classList.remove("open");
+      btn.setAttribute("aria-expanded", "false");
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && wrap.classList.contains("open")) {
+        wrap.classList.remove("open");
+        btn.setAttribute("aria-expanded", "false");
+        btn.focus();
+      }
     });
 
     el.querySelector(".search-trigger").addEventListener("click", openSearch);
