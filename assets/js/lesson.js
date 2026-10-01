@@ -48,6 +48,50 @@
     return null;
   }
 
+  /*
+   * Streaming playlists (.m3u8). Long videos can be split into small pieces
+   * with ffmpeg so no single file is large (see media/README.md). Safari plays
+   * them natively; other browsers use hls.js, bundled in assets/vendor and
+   * loaded only on pages that need it.
+   */
+  function isHls(src) {
+    return /\.m3u8(\?|#|$)/i.test(src);
+  }
+  let hlsLoading;
+  function loadHlsJs() {
+    if (window.Hls) return Promise.resolve(window.Hls);
+    if (!hlsLoading) {
+      hlsLoading = new Promise((resolve, reject) => {
+        const sc = document.createElement("script");
+        sc.src = U.base() + "assets/vendor/hls.min.js";
+        sc.onload = () => resolve(window.Hls);
+        sc.onerror = reject;
+        document.head.appendChild(sc);
+      });
+    }
+    return hlsLoading;
+  }
+  function setupHls(scope) {
+    scope.querySelectorAll("video[data-hls]").forEach((v) => {
+      const src = v.dataset.hls;
+      if (v.canPlayType("application/vnd.apple.mpegurl")) {
+        v.src = src;
+        return;
+      }
+      loadHlsJs()
+        .then((Hls) => {
+          if (Hls && Hls.isSupported()) {
+            const hls = new Hls({ capLevelToPlayerSize: true });
+            hls.loadSource(src);
+            hls.attachMedia(v);
+          } else {
+            v.src = src;
+          }
+        })
+        .catch(() => (v.src = src));
+    });
+  }
+
   function blockHead(kind, icon, title) {
     return '<p class="block-label"><span class="block-kind">' + U.icon(icon) + kind + "</span>" + (title ? '<span class="block-title">' + esc(title) + "</span>" : "") + "</p>";
   }
@@ -69,7 +113,9 @@
       const embed = embedUrl(b.src);
       const player = embed
         ? '<iframe src="' + esc(embed) + '" title="' + esc(b.title || "Lesson video") + '" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>'
-        : '<video controls preload="metadata" playsinline' + (b.poster ? ' poster="' + esc(mediaUrl(b.poster)) + '"' : "") + '><source src="' + esc(mediaUrl(b.src)) + '" />Your browser cannot play this video.</video>';
+        : isHls(b.src)
+          ? '<video controls preload="metadata" playsinline data-hls="' + esc(mediaUrl(b.src)) + '"' + (b.poster ? ' poster="' + esc(mediaUrl(b.poster)) + '"' : "") + "></video>"
+          : '<video controls preload="metadata" playsinline' + (b.poster ? ' poster="' + esc(mediaUrl(b.poster)) + '"' : "") + '><source src="' + esc(mediaUrl(b.src)) + '" />Your browser cannot play this video.</video>';
       return (
         '<div class="block block-video">' + blockHead("Video", "play", b.title) +
         '<div class="media-frame">' + player + "</div>" +
@@ -184,6 +230,7 @@
     "</div></section>";
 
   U.fillIcons(root);
+  setupHls(root);
   if (window.ACADEMY_YT) window.ACADEMY_YT.init(root);
   const cards = Array.from(root.querySelectorAll(".lesson-card"));
   const tocLinks = Array.from(root.querySelectorAll(".lesson-toc a"));
@@ -240,10 +287,13 @@
     }
 
     const cta = root.querySelector(".hero-cta");
+    const lastId = P.lastLesson(slug);
+    const lastIdx = r.courses.findIndex((c) => c.id === lastId);
+    const goIdx = lastIdx >= 0 && !st.doneIds.has(lastId) ? lastIdx : st.nextIndex;
     cta.innerHTML = st.complete
       ? '<span class="pill pill-done">' + U.icon("check") + "Path completed</span>"
-      : '<a class="btn btn-primary" href="#lesson-' + r.courses[st.nextIndex].id + '">' +
-        (st.started ? "Resume lesson " + (st.nextIndex + 1) : "Start lesson 1") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>";
+      : '<a class="btn btn-primary" href="#lesson-' + r.courses[goIdx].id + '">' +
+        (st.started || lastIdx > 0 ? "Continue lesson " + (goIdx + 1) : "Start lesson 1") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>";
 
     root.querySelector(".stat-label").textContent = st.done + " of " + st.total + " lessons complete";
     root.querySelector(".stat-meter").style.width = st.pct + "%";
@@ -279,8 +329,9 @@
     const i = Number(btn.dataset.index);
     const c = r.courses[i];
     P.complete(slug, c.id);
-    refresh(c.id);
     const nextCard = cards[i + 1];
+    if (nextCard) P.setLesson(slug, nextCard.dataset.id);
+    refresh(c.id);
     if (nextCard) {
       history.replaceState(null, "", "#lesson-" + nextCard.dataset.id);
       setTimeout(() => {
@@ -329,7 +380,13 @@
       if (c.getBoundingClientRect().top < window.innerHeight * 0.4) active = c;
     });
     tocLinks.forEach((a) => a.classList.toggle("active", a.dataset.id === active.dataset.id));
+    if (trackLesson && active.dataset.id !== lastSeen) {
+      lastSeen = active.dataset.id;
+      P.setLesson(slug, lastSeen);
+    }
   }
+  let trackLesson = false;
+  let lastSeen = null;
   window.addEventListener("scroll", spy, { passive: true });
 
   function pulse(el) {
@@ -359,4 +416,10 @@
   refresh();
   spy();
   focusLesson();
+  // Start remembering the lesson in view only after the page has settled,
+  // so simply opening a path does not overwrite "Welcome back".
+  setTimeout(() => {
+    trackLesson = true;
+    spy();
+  }, 1500);
 })();

@@ -47,7 +47,10 @@ sidebar or watching the video does not tick it. The check mark then shows in the
 "In this path" sidebar, on the lesson card, in the homepage path panel, the hero
 progress card, the avatar menu and the certification badges.
 
-Progress is saved in the learner's browser (`localStorage`). Each path page has a
+Progress is saved in the learner's browser (`localStorage`), so returning learners keep their check marks.
+The homepage shows a **Welcome back** link to the lesson they were last on, and after their first completed
+lesson the site asks the browser to keep this data (`navigator.storage.persist()`) rather than clearing it
+when the device runs low on space. Each path page has a
 "Reset progress" link. To move progress to a backend later, replace the functions
 in `window.ACADEMY_PROGRESS` at the bottom of `assets/js/data.js`.
 

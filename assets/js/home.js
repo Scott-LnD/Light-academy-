@@ -7,6 +7,22 @@
   // Stagger the hero headline word by word.
   document.querySelectorAll(".hero-title .word").forEach((w, i) => w.style.setProperty("--i", i));
 
+  /* ---------- Welcome back: jump to the lesson last opened ---------- */
+  (function () {
+    const slug = window.ACADEMY_PROGRESS.last();
+    const role = slug && U.findRole(slug);
+    const lessonId = role && window.ACADEMY_PROGRESS.lastLesson(slug);
+    const idx = lessonId ? role.courses.findIndex((c) => c.id === lessonId) : -1;
+    if (idx < 0) return;
+    const el = document.getElementById("welcome-back");
+    el.href = U.lessonUrl(slug, idx);
+    el.innerHTML =
+      '<span class="welcome-dot" aria-hidden="true"></span>' +
+      "<span>Welcome back. Continue <strong>" + U.escape(role.name) + " · " + U.escape(role.courses[idx].title) + "</strong></span>" +
+      U.icon("arrow");
+    el.hidden = false;
+  })();
+
   /* ---------- Hero progress card ---------- */
   const feat = U.featuredPath();
   const inRole = feat.role;

@@ -344,8 +344,13 @@ window.ACADEMY_UTIL = {
 })();
 
 /*
- * Learner progress, saved in this browser (localStorage).
- * Shape: { paths: { <slug>: [lessonId, ...] }, last: <slug> }
+ * Learner progress, saved in this browser (localStorage), so a returning
+ * learner sees their check marks and can carry on where they stopped.
+ * Shape: { paths: { <slug>: [lessonId, ...] }, lessons: { <slug>: lessonId },
+ *          last: <slug>, lastAt: <timestamp> }
+ *   paths    lessons marked complete (only by clicking "Next lesson")
+ *   lessons  the lesson last opened in each path
+ *   last     the path last visited
  * Swap these functions for API calls when progress moves to a backend.
  */
 window.ACADEMY_PROGRESS = (function () {
@@ -353,15 +358,36 @@ window.ACADEMY_PROGRESS = (function () {
   function load() {
     try {
       const d = JSON.parse(localStorage.getItem(KEY));
-      if (d && typeof d === "object" && d.paths) return d;
+      if (d && typeof d === "object" && d.paths) {
+        d.lessons = d.lessons || {};
+        return d;
+      }
     } catch (e) {}
-    return { paths: {}, last: null };
+    return { paths: {}, lessons: {}, last: null, lastAt: null };
   }
   function save(d) {
     try {
       localStorage.setItem(KEY, JSON.stringify(d));
     } catch (e) {}
   }
+
+  // Ask the browser to keep this site's data instead of clearing it when the
+  // device runs low on space. Chrome and Edge decide silently based on how much
+  // the site is used; Firefox may show a one-time prompt, so this only runs once
+  // the learner has actually started learning. Safari ignores it harmlessly.
+  let persistAsked = false;
+  function keepData() {
+    if (persistAsked) return;
+    persistAsked = true;
+    try {
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persisted().then((already) => {
+          if (!already) navigator.storage.persist().catch(() => {});
+        });
+      }
+    } catch (e) {}
+  }
+
   return {
     done(slug) {
       return new Set(load().paths[slug] || []);
@@ -375,7 +401,21 @@ window.ACADEMY_PROGRESS = (function () {
       if (list.indexOf(id) < 0) list.push(id);
       d.paths[slug] = list;
       d.last = slug;
+      d.lastAt = Date.now();
       save(d);
+      keepData();
+    },
+    // Remember the lesson the learner is on, for "Welcome back".
+    setLesson(slug, id) {
+      const d = load();
+      if (d.lessons[slug] === id && d.last === slug) return;
+      d.lessons[slug] = id;
+      d.last = slug;
+      d.lastAt = Date.now();
+      save(d);
+    },
+    lastLesson(slug) {
+      return load().lessons[slug] || null;
     },
     touch(slug) {
       const d = load();
@@ -385,10 +425,19 @@ window.ACADEMY_PROGRESS = (function () {
     last() {
       return load().last;
     },
+    lastAt() {
+      return load().lastAt;
+    },
+    keepData: keepData,
     reset(slug) {
       const d = load();
-      if (slug) delete d.paths[slug];
-      else d.paths = {};
+      if (slug) {
+        delete d.paths[slug];
+        delete d.lessons[slug];
+      } else {
+        d.paths = {};
+        d.lessons = {};
+      }
       save(d);
     }
   };
