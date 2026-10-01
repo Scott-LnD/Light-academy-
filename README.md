@@ -32,7 +32,7 @@ Path slugs: `get-started`, `admin`, `controller`, `payables`, `receivables`,
 - **Choose your role** scrolls to the role grid.
 - **Role card** selects that role and shows its path panel (deep link: `index.html#role-payables`).
 - **Start / Resume path** and every **course row** open `paths/<slug>.html#lesson-<lesson-id>`.
-- **Progress card** and the avatar menu open the next unfinished lesson of the path you were last on.
+- **Progress card** and the **progress button** (the small ring at the top right) open the lesson you were last on, or the next unfinished one. The button also links to your certifications.
 - **Get started banner** opens `paths/get-started.html`.
 - **New customer? See the go-live path** opens `paths/go-live.html`.
 - **Certification cards** open the matching role path. **Partner cards** and **Become a Light partner** open `paths/partners.html`.
@@ -45,7 +45,7 @@ A lesson is marked complete **only when the learner clicks "Next lesson"** (or
 "Finish path" on the last lesson). Opening a lesson, jumping to it from the
 sidebar or watching the video does not tick it. The check mark then shows in the
 "In this path" sidebar, on the lesson card, in the homepage path panel, the hero
-progress card, the avatar menu and the certification badges.
+progress card, the progress button at the top right and the certification badges.
 
 Progress is saved in the learner's browser (`localStorage`), so returning learners keep their check marks.
 The homepage shows a **Welcome back** link to the lesson they were last on, and after their first completed

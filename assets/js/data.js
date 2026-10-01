@@ -35,8 +35,6 @@
  * only when the learner clicks "Next lesson" (or "Finish path") on it.
  */
 window.ACADEMY = {
-  learner: { initials: "KL", name: "Kim Lee" },
-
   // Path featured in the hero card until the learner starts one.
   defaultPath: "admin",
 
@@ -311,7 +309,7 @@ window.ACADEMY_UTIL = {
       complete: r.courses.length > 0 && done === r.courses.length
     };
   },
-  // The path to feature in the hero card and avatar menu.
+  // The path to feature in the hero card and the progress button.
   featuredPath() {
     const A = window.ACADEMY;
     const last = window.ACADEMY_PROGRESS.last();
