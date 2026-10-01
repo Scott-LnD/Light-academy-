@@ -30,7 +30,7 @@ Path slugs: `get-started`, `admin`, `controller`, `payables`, `receivables`,
 ## Click path
 
 - **Choose your role** scrolls to the role grid.
-- **Role card** selects that role and shows its path panel (deep link: `index.html#role-payables`).
+- **Role card** expands in place to show that role's lessons; the other roles slide below it. Click outside the card (or press Esc) to close it. Deep link: `index.html#role-payables`.
 - **Start / Resume path** and every **course row** open `paths/<slug>.html#lesson-<lesson-id>`.
 - **Progress card** and the **progress button** (the small ring at the top right) open the lesson you were last on, or the next unfinished one. The button also links to your certifications.
 - **Get started banner** opens `paths/get-started.html`.
@@ -48,7 +48,7 @@ sidebar or watching the video does not tick it. The check mark then shows in the
 progress card, the progress button at the top right and the certification badges.
 
 Progress is saved in the learner's browser (`localStorage`), so returning learners keep their check marks.
-The homepage shows a **Welcome back** link to the lesson they were last on, and after their first completed
+A **Continue where you left off** bar at the top of every page links to the lesson they were last on, and after their first completed
 lesson the site asks the browser to keep this data (`navigator.storage.persist()`) rather than clearing it
 when the device runs low on space. Each path page has a
 "Reset progress" link. To move progress to a backend later, replace the functions
