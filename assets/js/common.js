@@ -155,6 +155,28 @@
     update();
   }
 
+  /* ---------- "Continue where you left off" bar at the very top ---------- */
+  function renderResumeBar() {
+    const P = window.ACADEMY_PROGRESS;
+    const slug = P.last();
+    const role = slug && U.findRole(slug);
+    const lessonId = role && P.lastLesson(slug);
+    const idx = lessonId ? role.courses.findIndex((c) => c.id === lessonId) : -1;
+    if (idx < 0) return;
+    const bar = document.createElement("div");
+    bar.className = "resume-bar";
+    bar.innerHTML =
+      '<div class="container resume-inner">' +
+      '<p class="resume-label"><span class="resume-dot" aria-hidden="true"></span>Continue where you left off</p>' +
+      '<a class="resume-btn" href="' + U.lessonUrl(slug, idx) + '">' +
+      '<span class="resume-play">' + U.icon("play") + "</span>" +
+      '<span class="resume-text"><span class="resume-path">' + U.escape(role.name) + "</span>" + U.escape(role.courses[idx].title) + "</span>" +
+      U.icon("arrow") +
+      "</a></div>";
+    const header = document.getElementById("site-header");
+    if (header) header.parentNode.insertBefore(bar, header);
+  }
+
   /* ---------- Footer ---------- */
   function renderFooter() {
     const el = document.getElementById("site-footer");
@@ -410,6 +432,7 @@
   window.ACADEMY_UTIL.Tour = Tour;
 
   /* ---------- Boot ---------- */
+  renderResumeBar();
   renderHeader();
   renderFooter();
   fillIcons();

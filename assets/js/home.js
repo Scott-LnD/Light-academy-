@@ -1,4 +1,4 @@
-/* Homepage: hero progress, role picker, path panel, certifications, partners, tour. */
+/* Homepage: hero progress, expanding role cards, certifications, partners, FAQ, tour. */
 (function () {
   const A = window.ACADEMY;
   const U = window.ACADEMY_UTIL;
@@ -6,22 +6,6 @@
 
   // Stagger the hero headline word by word.
   document.querySelectorAll(".hero-title .word").forEach((w, i) => w.style.setProperty("--i", i));
-
-  /* ---------- Welcome back: jump to the lesson last opened ---------- */
-  (function () {
-    const slug = window.ACADEMY_PROGRESS.last();
-    const role = slug && U.findRole(slug);
-    const lessonId = role && window.ACADEMY_PROGRESS.lastLesson(slug);
-    const idx = lessonId ? role.courses.findIndex((c) => c.id === lessonId) : -1;
-    if (idx < 0) return;
-    const el = document.getElementById("welcome-back");
-    el.href = U.lessonUrl(slug, idx);
-    el.innerHTML =
-      '<span class="welcome-dot" aria-hidden="true"></span>' +
-      "<span>Welcome back. Continue <strong>" + U.escape(role.name) + " · " + U.escape(role.courses[idx].title) + "</strong></span>" +
-      U.icon("arrow");
-    el.hidden = false;
-  })();
 
   /* ---------- Hero progress card ---------- */
   const feat = U.featuredPath();
@@ -76,21 +60,23 @@
     gsPill.innerHTML = (gsState.started ? gsState.done + " of " + gsState.total + " done" : "Start here") + U.icon("arrow");
   }
 
-  /* ---------- Role grid ---------- */
+  /* ---------- Role grid: cards expand in place to show their path ---------- */
   const grid = document.getElementById("role-grid");
-  const panel = document.getElementById("path-panel");
 
   grid.innerHTML = A.roles
     .map(
       (r, i) =>
-        '<button class="role-card reveal" type="button" role="tab" id="tab-' + r.slug + '" aria-controls="path-panel" data-role="' + r.slug + '" style="--d:' + i * 0.07 + 's">' +
+        '<div class="role-card reveal" data-role="' + r.slug + '" style="--d:' + i * 0.07 + 's">' +
+        '<button class="role-toggle" type="button" aria-expanded="false" aria-controls="role-panel-' + r.slug + '" id="role-btn-' + r.slug + '">' +
         (r.startHere ? '<span class="tag">Start here</span>' : "") +
         '<span class="role-icon">' + U.pixel(r.icon) + "</span>" +
         '<span class="role-name">' + U.escape(r.name) + "</span>" +
         '<span class="role-sub">' + U.escape(r.subtitle) + "</span>" +
         '<span class="role-foot"><span>' + r.courses.length + " courses</span>" +
-        '<span class="role-view text-link">View path ' + U.icon("arrow") + "</span></span>" +
-        "</button>"
+        '<span class="role-view text-link"><span class="rv-open">View path</span><span class="rv-close">Close</span> ' + U.icon("arrow") + "</span></span>" +
+        "</button>" +
+        '<div class="role-panel" id="role-panel-' + r.slug + '" role="region" aria-labelledby="role-btn-' + r.slug + '" inert><div class="role-panel-inner"></div></div>' +
+        "</div>"
     )
     .join("");
 
@@ -101,9 +87,8 @@
     const pct = st.pct;
     return (
       '<div class="path-head">' +
-      '<span class="path-icon">' + U.pixel(r.icon) + "</span>" +
-      '<div class="path-head-text"><h3>' + U.escape(r.name) + " path</h3><p>" + U.escape(r.description) + "</p></div>" +
-      '<a class="btn btn-dark" href="' + U.lessonUrl(r.slug, done && firstOpen >= 0 ? firstOpen : null) + '">' + (st.complete ? "Review path" : done ? "Resume path" : "Start path") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>" +
+      '<div class="path-head-text"><p>' + U.escape(r.description) + "</p></div>" +
+      '<a class="btn btn-primary" href="' + U.lessonUrl(r.slug, done && firstOpen >= 0 ? firstOpen : null) + '">' + (st.complete ? "Review path" : done ? "Resume path" : "Start path") + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>" +
       "</div>" +
       (done ? '<div class="path-meter" aria-label="' + pct + '% complete"><span style="--w:' + pct + '%"></span></div>' : "") +
       '<ol class="course-list">' +
@@ -125,67 +110,128 @@
     );
   }
 
-  let selected = null;
-  let swapTimer;
-  function selectRole(slug, opts) {
-    const r = U.findRole(slug);
-    if (!r || slug === selected) return;
-    selected = slug;
-    grid.querySelectorAll(".role-card").forEach((c) => {
-      const on = c.dataset.role === slug;
-      c.classList.toggle("selected", on);
-      c.setAttribute("aria-selected", String(on));
-      c.tabIndex = on ? 0 : -1;
+  const cards = Array.from(grid.querySelectorAll(".role-card"));
+  const EXPAND_MS = reduceMotion ? 0 : 450;
+  let openCard = null;
+  let busy = Promise.resolve();
+
+  // Animate every card from where it was to where it ends up (FLIP).
+  function flip(change) {
+    const before = new Map(cards.map((c) => [c, c.getBoundingClientRect()]));
+    change();
+    if (reduceMotion) return;
+    cards.forEach((c) => {
+      const a = before.get(c);
+      const b = c.getBoundingClientRect();
+      const dx = a.left - b.left;
+      const dy = a.top - b.top;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+      c.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: EXPAND_MS, easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
     });
-    panel.setAttribute("aria-labelledby", "tab-" + slug);
+  }
 
-    const swap = () => {
-      panel.innerHTML = panelHtml(r);
-      panel.classList.remove("swapping");
-      panel.classList.add("entering");
-      void panel.offsetWidth;
-      panel.classList.remove("entering");
-    };
-    clearTimeout(swapTimer);
-    if (opts && opts.instant) swap();
-    else {
-      panel.classList.add("swapping");
-      swapTimer = setTimeout(swap, reduceMotion ? 0 : 220);
-    }
+  function columns() {
+    return getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length || 1;
+  }
 
-    if (opts && opts.updateHash) history.replaceState(null, "", "#role-" + slug);
-    if (opts && opts.scroll) {
-      setTimeout(() => {
-        const rect = panel.getBoundingClientRect();
-        if (rect.top > window.innerHeight * 0.75 || rect.top < 70) {
-          window.scrollTo({ top: rect.top + window.scrollY - 90, behavior: reduceMotion ? "auto" : "smooth" });
-        }
-      }, 240);
+  // The open card moves to the start of its row and spans the full width,
+  // so the rest of that row (and everything after it) slides below it.
+  function placeCards() {
+    const cols = columns();
+    cards.forEach((c, i) => (c.style.order = String(i * 2)));
+    if (openCard) {
+      const i = cards.indexOf(openCard);
+      openCard.style.order = String(Math.floor(i / cols) * cols * 2 - 1);
     }
   }
 
+  const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  function collapse() {
+    if (!openCard) return Promise.resolve();
+    const card = openCard;
+    card.classList.remove("open");
+    card.querySelector(".role-toggle").setAttribute("aria-expanded", "false");
+    card.querySelector(".role-panel").inert = true;
+    return wait(EXPAND_MS * 0.6).then(() => {
+      flip(() => {
+        openCard = null;
+        card.classList.remove("expanded");
+        placeCards();
+      });
+      if (location.hash.indexOf("#role-") === 0) history.replaceState(null, "", location.pathname + location.search + "#roles");
+    });
+  }
+
+  function expand(card, opts) {
+    const r = U.findRole(card.dataset.role);
+    card.querySelector(".role-panel-inner").innerHTML = panelHtml(r);
+    U.fillIcons(card);
+    flip(() => {
+      openCard = card;
+      card.classList.add("expanded");
+      placeCards();
+    });
+    // Let the layout move first, then open the panel.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        card.classList.add("open");
+        card.querySelector(".role-toggle").setAttribute("aria-expanded", "true");
+        card.querySelector(".role-panel").inert = false;
+      })
+    );
+    history.replaceState(null, "", "#role-" + r.slug);
+    if (!opts || opts.scroll !== false) {
+      setTimeout(() => {
+        const top = card.getBoundingClientRect().top;
+        if (top < 70 || top > window.innerHeight * 0.6) {
+          window.scrollTo({ top: top + window.scrollY - 90, behavior: reduceMotion ? "auto" : "smooth" });
+        }
+      }, EXPAND_MS * 0.5);
+    }
+    return wait(EXPAND_MS);
+  }
+
+  // Queue changes so quick clicks never fight each other.
+  function openRole(slug, opts) {
+    busy = busy.then(() => {
+      const card = cards.find((c) => c.dataset.role === slug);
+      if (!card) return;
+      if (openCard === card) return opts && opts.toggle ? collapse() : null;
+      return collapse().then(() => expand(card, opts));
+    });
+    return busy;
+  }
+  function closeRole() {
+    busy = busy.then(collapse);
+    return busy;
+  }
+
   grid.addEventListener("click", (e) => {
-    const btn = e.target.closest(".role-card");
-    if (btn) selectRole(btn.dataset.role, { updateHash: true, scroll: true });
+    const toggle = e.target.closest(".role-toggle");
+    if (toggle) openRole(toggle.closest(".role-card").dataset.role, { toggle: true });
   });
-  // Arrow keys move between role tabs.
-  grid.addEventListener("keydown", (e) => {
-    const cards = Array.from(grid.querySelectorAll(".role-card"));
-    const i = cards.indexOf(document.activeElement);
-    if (i < 0) return;
-    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-    if (!step) return;
-    e.preventDefault();
-    const next = cards[(i + step + cards.length) % cards.length];
-    next.focus();
-    selectRole(next.dataset.role, { updateHash: true });
+  // Click anywhere outside the open card to close it.
+  document.addEventListener("click", (e) => {
+    if (openCard && !openCard.contains(e.target) && !e.target.closest(".tour-overlay, .role-toggle")) closeRole();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && openCard && !document.querySelector(".tour-overlay, .search-overlay.open")) {
+      const btn = openCard.querySelector(".role-toggle");
+      closeRole().then(() => btn.focus({ preventScroll: true }));
+    }
+  });
+  window.addEventListener("resize", () => {
+    if (openCard) placeCards();
   });
 
   // Deep link: index.html#role-controller opens that path.
   const hashRole = (location.hash.match(/^#role-(.+)$/) || [])[1];
-  selectRole(U.findRole(hashRole) && hashRole !== gs.slug ? hashRole : A.roles[0].slug, { instant: true });
-  if (hashRole) {
-    setTimeout(() => document.getElementById("roles").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }), 150);
+  if (hashRole && cards.some((c) => c.dataset.role === hashRole)) {
+    setTimeout(() => {
+      document.getElementById("roles").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+      openRole(hashRole, { scroll: false });
+    }, 150);
   }
 
   /* ---------- Certifications ---------- */
@@ -228,12 +274,12 @@
     { target: "[data-tour='hero']", title: "Welcome to Light Academy", body: "Short, role-based courses that teach only the parts of Light you use. This quick tour shows you around." },
     { target: "[data-tour='progress']", title: "Pick up where you left off", body: "Your current path and the next lesson live here. Click the card to jump straight back in." },
     { target: "[data-tour='start']", title: "Everyone starts here", body: "Three short courses on navigating Light, how the ledger works and your first login." },
-    { target: "[data-tour='role-grid']", title: "Choose your role", body: "Each card is a learning path. Admins and Controllers should start first. Click a card to see its courses." },
+    { target: "[data-tour='role-grid']", title: "Choose your role", body: "Each card is a learning path. Admins and Controllers should start first. Click a card to open its lessons right there." },
     {
-      target: "[data-tour='path']",
+      target: ".role-card[data-role='admin']",
       title: "Your path, lesson by lesson",
-      body: "Every row opens that lesson. A lesson is ticked once you click Next lesson on it, and the next one is flagged for you.",
-      before: () => selectRole(A.roles[0].slug, { instant: true })
+      body: "Every row opens that lesson. A lesson is ticked once you click Next lesson on it, and the next one is flagged for you. Click outside the card to close it.",
+      before: () => openRole("admin", { scroll: false })
     },
     { target: "[data-tour='certs']", title: "Get certified", body: "Finish a path, pass a hands-on sandbox assessment and earn a credential for your LinkedIn." },
     { target: "[data-tour='partners']", title: "Working with clients?", body: "Accounting firms and implementation partners get a dedicated track and the Certified Advisor credential." },

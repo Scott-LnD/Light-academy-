@@ -71,6 +71,25 @@ img { max-width: 100%; }
 .scroll-progress { position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60; pointer-events: none; }
 .scroll-progress span { display: block; height: 100%; background: rgba(255, 255, 255, 0.55); transform: scaleX(0); transform-origin: left; }
 
+/* "Continue where you left off": a slim bar above the header for returning learners. */
+.resume-bar { background: #0d0d0d; border-bottom: 1px solid var(--line); animation: resume-in 0.5s var(--ease) both; }
+.resume-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 46px; padding: 6px 0; }
+.resume-label { display: inline-flex; align-items: center; gap: 10px; margin: 0; color: var(--ink-2); font-size: 13.5px; white-space: nowrap; }
+.resume-dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.2); }
+.resume-btn {
+  display: inline-flex; align-items: center; gap: 10px; min-width: 0; height: 32px; padding: 0 12px 0 6px;
+  border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink); font-size: 13px;
+  transition: transform 0.2s var(--ease), border-color 0.2s;
+}
+.resume-btn:hover { transform: scale(1.03); border-color: rgba(255, 255, 255, 0.35); }
+.resume-play { display: grid; place-items: center; width: 22px; height: 22px; flex: none; border-radius: 50%; background: var(--accent); color: #fff; }
+.resume-play svg { width: 10px; height: 10px; margin-left: 1px; fill: currentColor; }
+.resume-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.resume-path { margin-right: 6px; color: var(--muted); }
+.resume-path::after { content: " ·"; }
+.resume-btn > svg { width: 14px; height: 14px; flex: none; color: var(--accent); }
+@keyframes resume-in { from { opacity: 0; transform: translateY(-100%); } }
+
 .site-header {
   position: sticky; top: 0; z-index: 50;
   background: rgba(33, 33, 33, 0.82);
@@ -202,28 +221,9 @@ kbd {
   font-family: var(--font-display); font-weight: 400;
   font-size: clamp(48px, 8vw, 92px); line-height: 1; letter-spacing: -0.03em;
 }
-.welcome-back {
-  display: inline-flex; align-items: center; gap: 10px; max-width: 100%; margin: 0 0 28px; padding: 8px 14px 8px 12px;
-  border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink-2); font-size: 14px;
-  animation: fade-up 0.6s var(--ease) both; transition: transform 0.2s var(--ease), border-color 0.2s;
-}
-.welcome-back[hidden] { display: none; }
-.welcome-back:hover { transform: scale(1.02); border-color: rgba(255, 255, 255, 0.3); }
-.welcome-back span:not(.welcome-dot) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.welcome-back strong { color: var(--ink); font-weight: 500; }
-.welcome-back svg { width: 15px; height: 15px; flex: none; color: var(--accent); }
-.welcome-dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.2); }
 .hero-title .word { display: inline-block; animation: fade-up 0.7s var(--ease) both; animation-delay: calc(var(--i, 0) * 0.06s); }
 .hero-title .accent em { font-style: italic; color: var(--accent); padding-right: 0.04em; }
-/* Underline sits under "our" only, so it starts from the "o". */
-.hero-title .ul { position: relative; display: inline-block; }
-.hero-title .ul::after {
-  content: ""; position: absolute; left: 0.02em; right: 0; bottom: 0.04em; height: 0.045em;
-  border-radius: 9px; background: currentColor; opacity: 0.55;
-  transform: scaleX(0); transform-origin: left; animation: underline 0.7s var(--ease) 0.6s forwards;
-}
 @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-@keyframes underline { to { transform: scaleX(1); } }
 
 .hero-lede, .section-lede { margin: 0 auto 10px; max-width: 34em; color: var(--ink-2); font-size: 20px; line-height: 1.5; }
 .hero-sub { margin: 0 auto 32px; max-width: 36em; color: var(--muted); font-size: 16px; }
@@ -294,7 +294,30 @@ kbd {
   padding: 20px 0 0; border: 0; border-top: 1px solid var(--line-strong); border-radius: 0; background: none;
   transition: border-color 0.2s, opacity 0.6s var(--ease), translate 0.6s var(--ease);
 }
-.role-card.selected { border-top-color: var(--accent); box-shadow: inset 0 1px 0 var(--accent); }
+.role-toggle {
+  display: flex; flex-direction: column; align-items: flex-start; width: 100%; padding: 0; border: 0; background: none;
+  text-align: left; color: inherit; cursor: pointer;
+}
+.role-card { will-change: transform; }
+/* Open card: spans the full row and becomes a box holding its path. */
+.role-card.expanded {
+  grid-column: 1 / -1; scroll-margin-top: 90px; padding: 22px 24px 8px; border-top-color: var(--accent);
+  background: var(--surface); border-radius: var(--radius); box-shadow: inset 0 1px 0 var(--accent);
+}
+.role-card.expanded .tag { top: 22px; right: 24px; }
+.role-card.expanded .role-name { font-size: 28px; }
+.rv-close { display: none; }
+.role-card.expanded .rv-open { display: none; }
+.role-card.expanded .rv-close { display: inline; }
+.role-card.expanded .role-view svg { transform: rotate(-90deg); }
+.role-view svg { transition: transform 0.3s var(--ease); }
+.role-panel { display: grid; width: 100%; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.45s var(--ease), opacity 0.3s ease; }
+.role-panel-inner { min-height: 0; overflow: hidden; }
+.role-card.open .role-panel { grid-template-rows: 1fr; opacity: 1; }
+.role-panel .path-head { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.role-panel .path-head p { margin: 0; color: var(--ink-2); font-size: 15px; }
+.role-panel .course-list li { opacity: 0; transform: translateY(6px); }
+.role-card.open .role-panel .course-list li { opacity: 1; transform: none; transition-delay: calc(0.12s + var(--i) * 0.045s); }
 .role-card .tag { position: absolute; top: 20px; right: 0; color: var(--muted); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; }
 .role-name, .partner-card h3, .cert-card h3 { margin: 14px 0 6px; font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
 .role-sub, .partner-card p, .cert-card p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
@@ -303,11 +326,6 @@ kbd {
 .role-card.selected .role-name { color: var(--ink); }
 
 /* ---------- Path panel ---------- */
-.path-panel { margin-top: 48px; padding: 26px 28px 14px; scroll-margin-top: 90px; }
-.path-panel > * { transition: opacity 0.2s ease, transform 0.25s var(--ease); }
-.path-panel.swapping > * { opacity: 0; transform: translateY(6px); }
-.path-panel.entering .path-head { opacity: 0; }
-.path-panel.entering .course-list li { opacity: 0; transform: translateY(4px); }
 .path-head { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; }
 .path-head-text { flex: 1; min-width: 0; }
 .path-head h3 { margin: 0; font-family: var(--font-display); font-size: 26px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
@@ -642,6 +660,10 @@ kbd {
 }
 
 @media (max-width: 620px) {
+  .resume-label { font-size: 0; gap: 0; }
+  .resume-label::after { content: "Continue"; font-size: 13px; margin-left: 8px; }
+  .resume-path { display: none; }
+  .role-card.expanded { padding: 18px 16px 6px; }
   .hero { padding-top: 64px; }
   .hero-sub { font-size: 16px; }
   .hero-actions { flex-direction: column; width: 100%; }
@@ -651,7 +673,6 @@ kbd {
   .band { padding: 72px 0; margin-top: 80px; }
   .steps { grid-template-columns: 1fr; }
   .faq summary { font-size: 18px; }
-  .path-panel { padding: 18px 16px 8px; }
   .path-head { flex-wrap: wrap; }
   .path-head .btn { width: 100%; }
   .course-row { grid-template-columns: 26px 1fr auto; gap: 10px; }
