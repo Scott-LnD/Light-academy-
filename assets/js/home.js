@@ -268,13 +268,18 @@
   flashGrid.innerHTML = flashes
     .map(
       (f, i) =>
-        '<button class="flash-card reveal" type="button" data-flash="' + i + '" style="--d:' + i * 0.08 + 's" aria-haspopup="dialog">' +
+        '<div class="flash-item reveal" style="--d:' + i * 0.08 + 's">' +
+        '<button class="flash-card" type="button" data-flash="' + i + '" aria-haspopup="dialog">' +
         flashCover(f) +
         '<span class="flash-meta">' + esc(f.date) + (i === 0 ? '<span class="flash-new">Latest</span>' : "") + "</span>" +
         '<span class="flash-title">Flash #' + f.number + ": " + esc(f.title) + "</span>" +
         '<span class="flash-summary">' + esc(f.summary) + "</span>" +
-        '<span class="text-link flash-open">Watch the Flash ' + U.icon("arrow") + "</span>" +
-        "</button>"
+        "</button>" +
+        '<div class="flash-links">' +
+        '<button class="text-link flash-open" type="button" data-flash="' + i + '" aria-haspopup="dialog">Watch the Flash ' + U.icon("arrow") + "</button>" +
+        '<a class="flash-blog-link" href="' + esc(f.blog) + '" target="_blank" rel="noopener">Read on the blog <span aria-hidden="true">&#8599;</span></a>' +
+        "</div>" +
+        "</div>"
     )
     .join("");
 
@@ -320,6 +325,7 @@
       sections +
       plus +
       '<p class="flash-outro">' + esc(f.outro) + "</p>" +
+      '<a class="btn btn-ghost flash-read" href="' + esc(f.blog) + '" target="_blank" rel="noopener">Read the full Flash #' + f.number + ' on the blog <span aria-hidden="true">&#8599;</span></a>' +
       "</div>"
     );
   }
@@ -372,7 +378,7 @@
     if (flashReturnFocus) flashReturnFocus.focus({ preventScroll: true });
   }
   flashGrid.addEventListener("click", (e) => {
-    const card = e.target.closest(".flash-card");
+    const card = e.target.closest("[data-flash]");
     if (card) openFlash(Number(card.dataset.flash));
   });
   document.addEventListener("keydown", (e) => {

@@ -388,7 +388,13 @@ kbd {
   color: inherit; text-align: left; cursor: pointer;
   transition: opacity 0.6s var(--ease), translate 0.6s var(--ease);
 }
-.flash-card.reveal { transition-delay: var(--d, 0s), var(--d, 0s); }
+.flash-item { display: flex; flex-direction: column; }
+.flash-item .flash-card { flex: 1; }
+.flash-links { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 4px; }
+.flash-links .flash-open { padding: 0; border: 0; background: none; cursor: pointer; }
+.flash-blog-link { color: var(--ink-2); font-size: 13.5px; white-space: nowrap; transition: color 0.2s; }
+.flash-blog-link:hover { color: var(--accent); }
+.flash-read { margin-top: 10px; }
 /* Cover in the style of the Flash video thumbnail: ribbed glass, serif "Flash", orange number. */
 .flash-cover {
   position: relative; display: flex; align-items: center; justify-content: center; gap: 0.06em; width: 100%; aspect-ratio: 16 / 9;
@@ -408,7 +414,7 @@ kbd {
 .flash-new { color: var(--accent); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; }
 .flash-title { margin: 8px 0 6px; font-family: var(--font-display); font-size: 22px; letter-spacing: -0.02em; line-height: 1.2; }
 .flash-summary { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
-.flash-open { margin-top: auto; font-size: 13.5px; }
+.flash-open { font-size: 13.5px; }
 
 /* ---------- Flash window ---------- */
 .flash-overlay {
