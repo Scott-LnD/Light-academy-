@@ -15,7 +15,7 @@ Or open `index.html` directly, or deploy the folder to any static host.
 ## Structure
 
 ```
-index.html            Homepage: hero, how it works, get started, role picker, certifications, FAQ
+index.html            Homepage: hero, how it works, get started, role picker, certifications, get help, FAQ
 paths/<slug>.html     One lesson page per path (placeholders, to be integrated later)
 assets/js/data.js     All content: roles, courses, progress, certifications
 assets/js/common.js   Header, footer, course search, scroll progress, reveal motion, tour engine
@@ -36,6 +36,7 @@ Path slugs: `get-started`, `admin`, `controller`, `payables`, `receivables`,
 - **Get started banner** opens `paths/get-started.html`.
 - **New customer? See the go-live path** opens `paths/go-live.html`.
 - **Certification cards** open the matching role path.
+- **Get help** links to in-app help at app.light.inc, the Help Center (light.inc/help) and help@light.inc. External links open in a new tab.
 - **Search courses** (or press `/` or `Ctrl+K`) finds any course and jumps to it.
 - **Take the tour** walks through the homepage step by step. It is offered automatically on a first visit.
 

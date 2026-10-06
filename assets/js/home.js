@@ -1,4 +1,4 @@
-/* Homepage: hero progress, expanding role cards, certifications, FAQ, tour. */
+/* Homepage: hero progress, expanding role cards, certifications, help, FAQ, tour. */
 (function () {
   const A = window.ACADEMY;
   const U = window.ACADEMY_UTIL;
@@ -271,6 +271,7 @@
       before: () => openRole("admin", { scroll: false })
     },
     { target: "[data-tour='certs']", title: "Get certified", body: "Finish a path, pass a hands-on sandbox assessment and earn a credential for your LinkedIn." },
+    { target: "[data-tour='help']", title: "Need a hand?", body: "Ask Light in the app, search the Help Center or email the support team. Every link opens in a new tab." },
     { target: "[data-tour='search']", title: "Find anything fast", body: "Search every course from any page. Press / or Ctrl+K to open it." }
   ];
 
