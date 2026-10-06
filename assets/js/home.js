@@ -293,8 +293,19 @@
         )
         .join("") +
       "</ol></div>";
+    // Each section can carry its own short walkthrough clip, shown after its text
+    // like on the blog: a YouTube link plays in the in-page player, an .mp4 loops
+    // silently like a GIF (with controls to unmute or pause).
+    const clip = (sct) => {
+      if (!sct.video) return "";
+      const id = window.ACADEMY_YT ? window.ACADEMY_YT.parseId(sct.video) : null;
+      const inner = id
+        ? window.ACADEMY_YT.markup({ src: sct.video, title: sct.title }, id)
+        : '<video src="' + esc(sct.video) + '" autoplay muted loop playsinline controls preload="metadata"' + (sct.poster ? ' poster="' + esc(sct.poster) + '"' : "") + "></video>";
+      return '<div class="media-frame flash-clip">' + inner + "</div>";
+    };
     const sections = f.sections
-      .map((sct) => "<h3>" + esc(sct.title) + "</h3>" + sct.paras.map((p) => "<p>" + esc(p) + "</p>").join(""))
+      .map((sct) => "<h3>" + esc(sct.title) + "</h3>" + sct.paras.map((p) => "<p>" + esc(p) + "</p>").join("") + clip(sct))
       .join("");
     const plus =
       "<h3>Plus, all this</h3><ul class=\"flash-plus\">" +

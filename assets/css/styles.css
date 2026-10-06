@@ -458,6 +458,8 @@ kbd {
 .flash-content { color: var(--ink-2); font-size: 15.5px; line-height: 1.7; }
 .flash-content p { margin: 0 0 14px; }
 .flash-content h3 { margin: 30px 0 10px; color: var(--ink); font-family: var(--font-display); font-size: 23px; font-weight: 400; letter-spacing: -0.015em; }
+.flash-clip { margin: 18px 0 8px; }
+.flash-clip video { object-fit: cover; background: #111; }
 .flash-plus { margin: 0; padding: 0; list-style: none; }
 .flash-plus li { padding: 12px 0; border-top: 1px solid var(--line); }
 .flash-plus li:last-child { border-bottom: 1px solid var(--line); }

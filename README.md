@@ -39,6 +39,7 @@ Path slugs: `get-started`, `admin`, `controller`, `payables`, `receivables`,
 - **What's new** shows Light's Flash updates. Clicking one opens a window with the date, a link to the blog, the
   video (YouTube, in-page player), clickable chapters that jump the video, and the full update. Edit them in the
   `flashes` list in `assets/js/data.js`: paste a YouTube link into `youtube`, and chapters are `m:ss` start times.
+  Each section can also take a walkthrough clip (`"video": "<YouTube or .mp4 link>"`), shown after its text.
 - **Get help** links to in-app help at app.light.inc, the Help Center (light.inc/help) and help@light.inc. External links open in a new tab.
 - **Search courses** (or press `/` or `Ctrl+K`) finds any course and jumps to it.
 - **Take the tour** walks through the homepage step by step. It is offered automatically on a first visit.

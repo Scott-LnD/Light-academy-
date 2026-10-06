@@ -136,6 +136,8 @@ window.ACADEMY = {
   // "What's new": Light's Flash product updates (source: Marketing / Flash in
   // Notion and light.inc/blog). Newest first. To add a video, paste its YouTube
   // link into "youtube". Chapters are "m:ss" start times shown under the video.
+  // A section can also have its own walkthrough clip: add "video": "<YouTube or
+  // .mp4 link>" to that section (optional "poster" image for .mp4).
   flashes: [
     {
       "number": 13,
