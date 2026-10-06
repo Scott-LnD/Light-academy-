@@ -144,7 +144,7 @@ window.ACADEMY = {
       "date": "30 Sep 2026",
       "title": "Introducing auto top-up",
       "blog": "https://light.inc/blog/flash-13",
-      "youtube": "",
+      "youtube": "https://youtu.be/ZQpAuKEiK7c",
       "summary": "Bring your existing company cards over without replacing them, cards that top themselves up, and vendor screening that runs continuously.",
       "chapters": [
         {
@@ -251,7 +251,7 @@ window.ACADEMY = {
       "date": "16 Sep 2026",
       "title": "A whole new look",
       "blog": "https://light.inc/blog/flash-12",
-      "youtube": "",
+      "youtube": "https://youtu.be/bmssb5sbDmc",
       "summary": "A new front door for Light, charts you can hold a conversation with, and self-billing that works in both directions.",
       "chapters": [
         {
@@ -347,7 +347,7 @@ window.ACADEMY = {
       "date": "1 Sep 2026",
       "title": "The App Store is live",
       "blog": "https://light.inc/blog/flash-11",
-      "youtube": "",
+      "youtube": "https://youtu.be/9jcPva304CY",
       "summary": "Hundreds of apps, installed in a click, that keep themselves current. Plus purchase requests open to every employee, reverse and reissue on sent invoices, and contract linking.",
       "chapters": [
         {
