@@ -464,5 +464,20 @@ window.ACADEMY_YT = (function () {
     act[k]();
   }
 
-  return { parseId: parseId, markup: markup, init: init };
+  // Jump a player to `sec` seconds and play, loading YouTube first if needed.
+  // Used by chapter lists (e.g. the Flash videos on the homepage).
+  function seek(el, sec) {
+    const p = get(el);
+    active = p;
+    if (!p.yt) {
+      p.start = Math.max(0, Math.floor(sec));
+      p.load();
+      return;
+    }
+    if (!p.ready) return;
+    p.yt.seekTo(Math.max(0, sec), true);
+    p.yt.playVideo();
+  }
+
+  return { parseId: parseId, markup: markup, init: init, seek: seek };
 })();

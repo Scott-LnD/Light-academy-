@@ -133,6 +133,331 @@ window.ACADEMY = {
     }
   ],
 
+  // "What's new": Light's Flash product updates (source: Marketing / Flash in
+  // Notion and light.inc/blog). Newest first. To add a video, paste its YouTube
+  // link into "youtube". Chapters are "m:ss" start times shown under the video.
+  // A section can also have its own walkthrough clip: add "video": "<YouTube or
+  // .mp4 link>" to that section (optional "poster" image for .mp4).
+  flashes: [
+    {
+      "number": 13,
+      "date": "30 Sep 2026",
+      "title": "Introducing auto top-up",
+      "blog": "https://light.inc/blog/flash-13",
+      "youtube": "https://youtu.be/ZQpAuKEiK7c",
+      "summary": "Bring your existing company cards over without replacing them, cards that top themselves up, and vendor screening that runs continuously.",
+      "chapters": [
+        {
+          "t": "0:00",
+          "label": "Intro"
+        },
+        {
+          "t": "0:15",
+          "label": "Add your cards to Light"
+        },
+        {
+          "t": "0:50",
+          "label": "Auto top-up"
+        },
+        {
+          "t": "1:10",
+          "label": "Vendor screening"
+        },
+        {
+          "t": "1:30",
+          "label": "LCI updates"
+        },
+        {
+          "t": "2:55",
+          "label": "Plus, all this"
+        }
+      ],
+      "intro": [
+        "Here's what's new in Light over the last two weeks.",
+        "You can now watch these Flash updates inside Light, too. Just open notifications in the bottom left of the desktop app."
+      ],
+      "sections": [
+        {
+          "title": "LCI updates",
+          "paras": [
+            "We're constantly improving the Light Command Interface, the LCI, which you probably know best as our chat assistant.",
+            "You can now post draft journal entries from the chat, including retrying ones that failed.",
+            "The assistant can also answer accounting questions using our help centre and IFRS standards, or find invoices missing a revenue release schedule and apply the right template in bulk. It'll report anything it skips.",
+            "We've also added confirmation steps. Before posting or deleting an entry, archiving an invoice or sending a message, it shows you what it's about to do and waits for your approval. That applies in Slack and Teams, too.",
+            "Autonomous, but not unsupervised. That distinction matters more the more the assistant is trusted with."
+          ]
+        },
+        {
+          "title": "Auto top-up",
+          "paras": [
+            "Cards running dry mid-month is a solved problem now.",
+            "Ask the assistant to create a top-up agent and it'll watch your wallet balance. Set your threshold, and when the balance drops below it, the agent tops it up.",
+            "You decide how much rope it gets: alert you, or ask for confirmation in Slack or Teams."
+          ]
+        },
+        {
+          "title": "Vendor screening",
+          "paras": [
+            "Every company pays vendors. Almost nobody checks all of them.",
+            "Light now checks vendor VAT numbers against official registries and confirms that the legal name matches the company you're doing business with. It also screens companies and their beneficial owners against global sanctions and PEP lists.",
+            "Those checks run at onboarding, whenever details change and on renewal. Sanctions lists move and ownership changes, so a check that only happens once stops being a check."
+          ]
+        },
+        {
+          "title": "Add your cards to Light",
+          "paras": [
+            "Moving finance platforms is hard enough without being told to reissue every company card first.",
+            "We've started rolling out support for cards from other providers, including Amex and your bank. So you can bring your existing company cards into Light without replacing them.",
+            "Create an external card account, add your cards in the app or by CSV, then import transactions by CSV or through the API.",
+            "From there, Light requests receipts, matches and codes the transactions, and posts them to the ledger. They behave the same way cards issued through Light do.",
+            "If you're interested, reach out to your Light account or implementation manager."
+          ]
+        }
+      ],
+      "plus": [
+        {
+          "lead": "Sort line items on invoices, credits and contracts.",
+          "text": "Click any column header to sort by product, quantity, price and more. Your sort order is remembered and doesn't change the saved order or the PDF."
+        },
+        {
+          "lead": "Declined and voided card transactions now visible.",
+          "text": "Filter by status, see the reason, and bulk edit correctly leaves these rows alone."
+        },
+        {
+          "lead": "Email alerts for payment failures.",
+          "text": "Available alongside Slack, Teams, mobile and web push in your notification settings."
+        },
+        {
+          "lead": "Map your Stripe tax rates to Light tax codes.",
+          "text": "Set the mapping in integration settings and both invoice imports and AP use it rather than inferring from Stripe's own signals."
+        },
+        {
+          "lead": "Faster bills list for high volumes.",
+          "text": "Noticeably quicker for companies carrying a lot of bills."
+        },
+        {
+          "lead": "Advanced activity logs.",
+          "text": "Every high-level action now writes to a single log, across AP, AR, payments, cards, agents and workflows. So you can see everything one person did, every update in a period, or everything a single agent run touched from start to finish."
+        },
+        {
+          "lead": "NemHandel e-invoicing for Denmark, KID payment references for Norway.",
+          "text": "Danish entities can register for NemHandel during entity setup and send OIOUBL invoices and credit notes. Norwegian entities can configure KID payment references in entity settings, and Light calculates the check digits and includes them on sales invoices."
+        }
+      ],
+      "outro": "That's Flash #13. If you have questions, reach out to your Customer Success contact or use the LCI assistant."
+    },
+    {
+      "number": 12,
+      "date": "16 Sep 2026",
+      "title": "A whole new look",
+      "blog": "https://light.inc/blog/flash-12",
+      "youtube": "https://youtu.be/bmssb5sbDmc",
+      "summary": "A new front door for Light, charts you can hold a conversation with, and self-billing that works in both directions.",
+      "chapters": [
+        {
+          "t": "0:00",
+          "label": "Intro"
+        },
+        {
+          "t": "0:15",
+          "label": "The new homepage"
+        },
+        {
+          "t": "0:50",
+          "label": "Charts in the assistant"
+        },
+        {
+          "t": "1:05",
+          "label": "Self-billing, both ways"
+        },
+        {
+          "t": "1:17",
+          "label": "Purchase request approvals in Slack and Teams"
+        },
+        {
+          "t": "1:27",
+          "label": "Plus, all this"
+        }
+      ],
+      "intro": [
+        "Welcome to Flash #12. Here is what our team shipped over the last two weeks.",
+        "Before we dive in: last month we presented custom agents. Two weeks later, our customers have built over one hundred custom agents between them, all running on schedules, removing repeated admin tasks. The uptake has been astonishing. Keep building!"
+      ],
+      "sections": [
+        {
+          "title": "The new homepage",
+          "paras": [
+            "We have given the Light product a makeover. Open the desktop app today and the first thing you see is the Light Command Interface, our chat functionality, not a wall of widgets. Everything is permission-filtered, so you only see what you can act on.",
+            "Underneath, you'll find digest cards for the things that need your attention. Pending approvals, your agents' latest runs, your recent conversations.",
+            "Miss the dashboard overview? Don't worry, it hasn't gone anywhere. There is a toggle in the header and it remembers where you left it. You can always toggle back if that is more your thing.",
+            "There is also a new skills page listing everything the assistant can do, so \"what can I ask it?\" finally has a proper answer."
+          ]
+        },
+        {
+          "title": "Charts in the assistant",
+          "paras": [
+            "Ask a question with a shape to it in the LCI, something like spend by vendor this year, and a chart opens alongside the answer. Line, bar, area, pie or a combination.",
+            "Ask follow ups in plain language and the same chart updates in place rather than starting over. Narrow it to one entity, switch it to quarters, flip it to a bar.",
+            "Each chart is saved, so you can close the thread and pick it up later on any machine. Web only for now."
+          ]
+        },
+        {
+          "title": "Self-billing, both ways",
+          "paras": [
+            "Self-billing is when the buyer writes the invoice instead of the seller. It comes up whenever only the buyer can work out what is owed: a grid operator paying for balancing services, or a battery lease fee calculated on revenue the owner never sees.",
+            "Until now a self-billed invoice had to be typed into Light by hand, and there was no way to issue one at all. Both sides now work.",
+            "Receiving them. Email a self-billed invoice to your company's sales invoice address, or upload the PDF directly. Light reads it and fills in the customer, dates, terms, reference and line items, matched to your product catalogue. The draft shows the customer's actual PDF rather than our re-render, with a banner flagging anything the scan could not resolve.",
+            "Issuing them. A new Create bill button on Bills. Pick the entity and vendor, add your line items, and render it on the new self-billed template, which shows the vendor as issuer and your entity as recipient. That is what makes it valid as the vendor's own invoice. Once approved, Send bill emails it out and tells the vendor they do not need to send one back."
+          ]
+        },
+        {
+          "title": "Purchase request approvals in Slack and Teams",
+          "paras": [
+            "Approvers no longer need to open Light. The request lands carrying everything needed to decide: vendor, description, requester, amount and line items. Approve and Reject buttons sit right there.",
+            "Reject asks for a reason. The message then updates in place showing who decided and when, so the thread stays accurate for anyone reading it later."
+          ]
+        }
+      ],
+      "plus": [
+        {
+          "lead": "Self-serve e-invoicing setup.",
+          "text": "Adding a network to an entity no longer needs us to do it for you."
+        },
+        {
+          "lead": "Excel exports alongside CSV.",
+          "text": "For customers, invoices, contracts and credits."
+        },
+        {
+          "lead": "The activity trail now covers cards.",
+          "text": "Creation, limit changes and card requests all join the timeline, and it is exposed on the public API."
+        },
+        {
+          "lead": "Create bills and match bank transactions with the LCI.",
+          "text": "Two new tools, live for every company."
+        },
+        {
+          "lead": "Receipt-found notifications for every cardholder.",
+          "text": "If the email fetcher matches a receipt to your transaction, you'll be notified."
+        }
+      ],
+      "outro": "That is it for Flash #12. Any questions? Reach out to your Customer Success contact, use the LCI, or head to light.inc/help."
+    },
+    {
+      "number": 11,
+      "date": "1 Sep 2026",
+      "title": "The App Store is live",
+      "blog": "https://light.inc/blog/flash-11",
+      "youtube": "https://youtu.be/9jcPva304CY",
+      "summary": "Hundreds of apps, installed in a click, that keep themselves current. Plus purchase requests open to every employee, reverse and reissue on sent invoices, and contract linking.",
+      "chapters": [
+        {
+          "t": "0:00",
+          "label": "Intro"
+        },
+        {
+          "t": "0:10",
+          "label": "The Light App Store"
+        },
+        {
+          "t": "0:45",
+          "label": "Purchase requests, now open to everyone"
+        },
+        {
+          "t": "1:00",
+          "label": "Reverse and reissue a sent invoice"
+        },
+        {
+          "t": "1:12",
+          "label": "Link invoices to contracts"
+        },
+        {
+          "t": "1:25",
+          "label": "Plus, all this"
+        }
+      ],
+      "intro": [
+        "The Light App Store is live for all customers, with hundreds of apps available from launch.",
+        "Mileage and per diem across Europe and the US. Payroll for Salary.dk, Zenegy, HiBob, Rippling and hundreds more. Banking connections, audit exports for German and Swedish compliance, FP&A and reporting tools.",
+        "An admin installs one in a click. No IT ticket, no deploy request, no waiting on a release cycle. Apps open inside Light with your session and theme carried over, so there is no second login and no new tab. Removing one is just as quick.",
+        "Your core Light stays exactly as it is. Apps sit around it and adapt to how your business actually runs. Add what you need, drop what you do not."
+      ],
+      "sections": [
+        {
+          "title": "The part we are most pleased with",
+          "paras": [
+            "Installing an app is the easy bit. Keeping it correct is the work, and that is the part we have taken off your desk.",
+            "Mileage rates move. VAT moves. Governments change their minds mid-year. Light watches the official sources for every app, and when a source updates, the app updates with it.",
+            "The same applies when something goes wrong. The system detects it, agents fix it, agents verify the fix. Routine repairs ship on their own. Anything critical keeps a human in the loop, reviewed and signed off before it reaches you. When it matters, your app tells you in plain language what happened and what it means for you.",
+            "Light monitors the apps, not your data. It records that something failed and where. Never a name, never an amount, never a keystroke. All of it on Light's own European infrastructure."
+          ]
+        },
+        {
+          "title": "On security",
+          "paras": [
+            "An app can only reach Light through our public API, and it carries the token of whoever is using it. An app can never see or do more than the person using it.",
+            "Every app declares up front exactly which parts of the API it needs. Anything it did not declare is refused. That declaration is the entire surface area of the app.",
+            "Every call an app makes is logged against the app that made it. Apps that store data get their own isolated space, with rules preventing one company's data from being visible to another."
+          ]
+        },
+        {
+          "title": "What comes next",
+          "paras": [
+            "Very soon you will be able to build your own apps and share them with other finance builders.",
+            "Which means the value of Light is not only what exists in it today. It is what the platform makes possible next."
+          ]
+        },
+        {
+          "title": "Purchase requests, now open to everyone",
+          "paras": [
+            "Procurement only works when the whole company can use it. Any employee can now raise a purchase request, rather than just admins and designated requesters.",
+            "Creators can edit their own requests, and editing a rejected request resubmits it automatically. Approvers and AP staff can view the requests they are involved in without needing a broader viewing role. You can cancel a request together with its linked purchase order, and archive both from the actions menu."
+          ]
+        },
+        {
+          "title": "Reverse and reissue a sent invoice",
+          "paras": [
+            "A sent invoice is no longer stuck once it is issued. Reverse it and Light automatically posts and sends the correcting credit note, then reissues a new editable draft in its place. The dialog shows a preview and lets you edit line details before you confirm.",
+            "This also covers the German requirement that an invoice cannot be amended once it has gone to a customer. A new number, a clean audit trail, no manual workaround."
+          ]
+        },
+        {
+          "title": "Link invoices directly to contracts",
+          "paras": [
+            "You can now manually link an existing invoice to a contract, or create a new invoice directly from one, and unlink it later. Contract totals and billing schedules update automatically.",
+            "Useful for anything sitting outside the recurrence rules, like a one-off setup fee. And if something needed correcting partway through a contract, the billing schedule no longer suffers for the rest of the term."
+          ]
+        }
+      ],
+      "plus": [
+        {
+          "lead": "Cards auto-freeze when a user is deactivated.",
+          "text": "No more remembering to freeze the card of someone who has left."
+        },
+        {
+          "lead": "Drag-fill values across line items.",
+          "text": "Spreadsheet-style fill on contracts, invoices, customer credits and journal entries."
+        },
+        {
+          "lead": "Invoice emails now show payments, credits applied and balance due.",
+          "text": "Customers see their true outstanding balance without logging in."
+        },
+        {
+          "lead": "Approve vendor card requests from Microsoft Teams.",
+          "text": "Including the full decline-reason flow that was previously Slack only."
+        },
+        {
+          "lead": "Contract termination reason tracking.",
+          "text": "Categorise why a contract ended, visible on the contract, in CSV exports and via the API."
+        },
+        {
+          "lead": "Singapore payments now route via local GIRO.",
+          "text": "Faster and more reliable than international SWIFT."
+        }
+      ],
+      "outro": "That is Flash #11. Reach out to your Light contact, use the LCI, or head to light.inc/help."
+    }
+  ],
+
   certifications: [
     {
       name: "Light Certified Administrator",
