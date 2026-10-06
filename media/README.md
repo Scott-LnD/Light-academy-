@@ -12,7 +12,7 @@ media/demos/<path>/<lesson>/index.html           an exported interactive demo
 ```
 
 `<path>` is the path slug: `get-started`, `admin`, `controller`, `payables`,
-`receivables`, `employee`, `finance-leader`, `go-live`, `partners`.
+`receivables`, `employee`, `finance-leader`, `go-live`.
 
 ## Option 1: a normal .mp4 (videos up to about 100 MB)
 

@@ -23,7 +23,7 @@
       ["Home", "#home"],
       ["Roles", "#roles"],
       ["Certifications", "#certifications"],
-      ["For partners", "#partners"]
+      ["Help", "#help"]
     ];
     el.innerHTML =
       '<div class="container header-inner">' +
