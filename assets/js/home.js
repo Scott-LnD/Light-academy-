@@ -1,4 +1,4 @@
-/* Homepage: hero progress, expanding role cards, certifications, help, FAQ, tour. */
+/* Homepage: hero progress, expanding role cards, certifications, help, what's new, FAQ, tour. */
 (function () {
   const A = window.ACADEMY;
   const U = window.ACADEMY_UTIL;
@@ -251,6 +251,139 @@
     })
     .join("");
 
+  /* ---------- What's new: Flash cards that open in a window ---------- */
+  const flashGrid = document.getElementById("flash-grid");
+  const flashes = A.flashes || [];
+  const toSec = (t) => t.split(":").reduce((acc, n) => acc * 60 + Number(n), 0);
+  const esc = U.escape;
+
+  function flashCover(f, big) {
+    return (
+      '<span class="flash-cover' + (big ? " big" : "") + '" aria-hidden="true">' +
+      '<span class="flash-cover-word">Flash</span><span class="flash-cover-num">#' + f.number + "</span>" +
+      "</span>"
+    );
+  }
+
+  flashGrid.innerHTML = flashes
+    .map(
+      (f, i) =>
+        '<button class="flash-card reveal" type="button" data-flash="' + i + '" style="--d:' + i * 0.08 + 's" aria-haspopup="dialog">' +
+        flashCover(f) +
+        '<span class="flash-meta">' + esc(f.date) + (i === 0 ? '<span class="flash-new">Latest</span>' : "") + "</span>" +
+        '<span class="flash-title">Flash #' + f.number + ": " + esc(f.title) + "</span>" +
+        '<span class="flash-summary">' + esc(f.summary) + "</span>" +
+        '<span class="text-link flash-open">Watch the Flash ' + U.icon("arrow") + "</span>" +
+        "</button>"
+    )
+    .join("");
+
+  function flashBody(f) {
+    const ytId = f.youtube && window.ACADEMY_YT ? window.ACADEMY_YT.parseId(f.youtube) : null;
+    const video = ytId
+      ? '<div class="media-frame flash-video">' + window.ACADEMY_YT.markup({ src: f.youtube, title: "Flash #" + f.number }, ytId) + "</div>"
+      : '<div class="flash-video flash-video-soon">' + flashCover(f, true) + '<span class="flash-soon-note">Video coming soon</span></div>';
+    const chapters =
+      '<div class="flash-chapters"><p class="flash-label">In this video</p><ol>' +
+      f.chapters
+        .map(
+          (c) =>
+            '<li><button type="button" class="flash-chapter" data-t="' + toSec(c.t) + '"' + (ytId ? "" : " disabled") + ">" +
+            '<span class="flash-time">' + esc(c.t) + "</span><span>" + esc(c.label) + "</span></button></li>"
+        )
+        .join("") +
+      "</ol></div>";
+    const sections = f.sections
+      .map((sct) => "<h3>" + esc(sct.title) + "</h3>" + sct.paras.map((p) => "<p>" + esc(p) + "</p>").join(""))
+      .join("");
+    const plus =
+      "<h3>Plus, all this</h3><ul class=\"flash-plus\">" +
+      f.plus.map((x) => "<li><strong>" + esc(x.lead) + "</strong> " + esc(x.text) + "</li>").join("") +
+      "</ul>";
+    return (
+      '<h2 class="flash-modal-title" id="flash-modal-title">Flash #' + f.number + ": " + esc(f.title) + "</h2>" +
+      video +
+      chapters +
+      '<div class="flash-content">' +
+      f.intro.map((p) => "<p>" + esc(p) + "</p>").join("") +
+      sections +
+      plus +
+      '<p class="flash-outro">' + esc(f.outro) + "</p>" +
+      "</div>"
+    );
+  }
+
+  let flashModal = null;
+  let flashReturnFocus = null;
+  function openFlash(i) {
+    const f = flashes[i];
+    if (!f) return;
+    flashReturnFocus = document.activeElement;
+    flashModal = document.createElement("div");
+    flashModal.className = "flash-overlay";
+    flashModal.innerHTML =
+      '<div class="flash-modal" role="dialog" aria-modal="true" aria-labelledby="flash-modal-title">' +
+      '<header class="flash-modal-head">' +
+      '<span class="flash-modal-date">' + esc(f.date) + "</span>" +
+      '<a class="flash-modal-blog" href="' + esc(f.blog) + '" target="_blank" rel="noopener">Read on the blog <span aria-hidden="true">&#8599;</span></a>' +
+      '<button class="flash-modal-close" type="button" aria-label="Close">' + U.icon("close") + "</button>" +
+      "</header>" +
+      '<div class="flash-modal-body">' + flashBody(f) + "</div>" +
+      "</div>";
+    document.body.appendChild(flashModal);
+    document.body.classList.add("no-scroll");
+    const body = flashModal.querySelector(".flash-modal-body");
+    if (window.ACADEMY_YT) window.ACADEMY_YT.init(body);
+    body.addEventListener("click", (e) => {
+      const ch = e.target.closest(".flash-chapter");
+      if (!ch || ch.disabled) return;
+      const player = body.querySelector(".yt-player");
+      if (player) {
+        window.ACADEMY_YT.seek(player, Number(ch.dataset.t));
+        body.querySelectorAll(".flash-chapter").forEach((b) => b.classList.toggle("on", b === ch));
+        player.closest(".flash-video").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+      }
+    });
+    flashModal.addEventListener("click", (e) => {
+      if (e.target === flashModal || e.target.closest(".flash-modal-close")) closeFlash();
+    });
+    requestAnimationFrame(() => flashModal && flashModal.classList.add("open"));
+    flashModal.querySelector(".flash-modal-close").focus({ preventScroll: true });
+  }
+  function closeFlash() {
+    if (!flashModal) return;
+    const m = flashModal;
+    flashModal = null;
+    m.classList.remove("open");
+    document.body.classList.remove("no-scroll");
+    // Removing the window also stops the video.
+    setTimeout(() => m.remove(), reduceMotion ? 0 : 250);
+    if (flashReturnFocus) flashReturnFocus.focus({ preventScroll: true });
+  }
+  flashGrid.addEventListener("click", (e) => {
+    const card = e.target.closest(".flash-card");
+    if (card) openFlash(Number(card.dataset.flash));
+  });
+  document.addEventListener("keydown", (e) => {
+    if (!flashModal) return;
+    if (e.key === "Escape") {
+      closeFlash();
+    } else if (e.key === "Tab") {
+      // Keep keyboard focus inside the window.
+      const items = Array.from(flashModal.querySelectorAll("a, button:not([disabled]), [tabindex]:not([tabindex='-1'])"));
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
   /* ---------- FAQ: keep one answer open at a time ---------- */
   document.querySelectorAll(".faq details").forEach((d, i, all) => {
     d.addEventListener("toggle", () => {
@@ -272,6 +405,7 @@
     },
     { target: "[data-tour='certs']", title: "Get certified", body: "Finish a path, pass a hands-on sandbox assessment and earn a credential for your LinkedIn." },
     { target: "[data-tour='help']", title: "Need a hand?", body: "Ask Light in the app, search the Help Center or email the support team. Every link opens in a new tab." },
+    { target: "[data-tour='flash']", title: "What's new", body: "Every Flash update in one place. Open one to watch the video, jump to a chapter and read what shipped." },
     { target: "[data-tour='search']", title: "Find anything fast", body: "Search every course from any page. Press / or Ctrl+K to open it." }
   ];
 
