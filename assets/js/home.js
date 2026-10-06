@@ -1,4 +1,4 @@
-/* Homepage: hero progress, expanding role cards, certifications, partners, FAQ, tour. */
+/* Homepage: hero progress, expanding role cards, certifications, FAQ, tour. */
 (function () {
   const A = window.ACADEMY;
   const U = window.ACADEMY_UTIL;
@@ -251,17 +251,6 @@
     })
     .join("");
 
-  /* ---------- Partners ---------- */
-  document.getElementById("partner-grid").innerHTML = A.partners
-    .map(
-      (p, i) =>
-        '<a class="partner-card reveal" href="' + U.lessonUrl("partners") + '" style="--d:' + i * 0.1 + 's">' +
-        '<span class="partner-mark">' + U.pixel(["check", "connect", "report"][i % 3]) + "</span>" +
-        "<h3>" + U.escape(p.title) + "</h3><p>" + U.escape(p.description) + "</p>" +
-        '<span class="text-link">Explore the track ' + U.icon("arrow") + "</span></a>"
-    )
-    .join("");
-
   /* ---------- FAQ: keep one answer open at a time ---------- */
   document.querySelectorAll(".faq details").forEach((d, i, all) => {
     d.addEventListener("toggle", () => {
@@ -282,7 +271,6 @@
       before: () => openRole("admin", { scroll: false })
     },
     { target: "[data-tour='certs']", title: "Get certified", body: "Finish a path, pass a hands-on sandbox assessment and earn a credential for your LinkedIn." },
-    { target: "[data-tour='partners']", title: "Working with clients?", body: "Accounting firms and implementation partners get a dedicated track and the Certified Advisor credential." },
     { target: "[data-tour='search']", title: "Find anything fast", body: "Search every course from any page. Press / or Ctrl+K to open it." }
   ];
 

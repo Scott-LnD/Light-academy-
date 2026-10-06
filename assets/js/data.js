@@ -166,34 +166,6 @@ window.ACADEMY = {
         { title: "Banks, cards & integrations", time: "15–30 min" },
         { title: "Opening balances & your first close", time: "15–30 min" }
       ]
-    },
-    {
-      slug: "partners",
-      name: "Partner",
-      icon: "sparkles",
-      eyebrow: "For partners",
-      description: "Learn Light once, deploy it across every client. Ends with the Light Certified Advisor credential.",
-      courses: [
-        { title: "Partner onboarding", time: "15 min" },
-        { title: "Multi-client workspace", time: "15–30 min" },
-        { title: "Implementation playbooks", time: "15–30 min" },
-        { title: "Light Certified Advisor assessment", time: "45 min" }
-      ]
-    }
-  ],
-
-  partners: [
-    {
-      title: "Light Certified Advisor",
-      description: "The credential for partners: configuration, close and reporting across multiple client instances."
-    },
-    {
-      title: "Multi-client workspace",
-      description: "Learn how to switch entities, manage client access and standardise your setup playbook."
-    },
-    {
-      title: "Implementation playbooks",
-      description: "Step-by-step go-live templates you can reuse on every client engagement."
     }
   ]
 };

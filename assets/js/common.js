@@ -22,8 +22,7 @@
     const links = [
       ["Home", "#home"],
       ["Roles", "#roles"],
-      ["Certifications", "#certifications"],
-      ["For partners", "#partners"]
+      ["Certifications", "#certifications"]
     ];
     el.innerHTML =
       '<div class="container header-inner">' +

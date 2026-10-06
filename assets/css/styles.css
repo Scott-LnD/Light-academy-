@@ -278,9 +278,8 @@ kbd {
 .band + .section { padding-top: 112px; }
 
 /* ---------- Icons in tiles ---------- */
-.role-icon, .cert-icon, .partner-mark { display: block; flex: none; color: var(--accent); }
+.role-icon, .cert-icon { display: block; flex: none; color: var(--accent); }
 .role-icon svg, .cert-icon svg { width: 24px; height: 24px; }
-.partner-mark .logo-mark { width: 20px; height: 20px; color: var(--accent); }
 .path-icon {
   display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-sm);
   border: 1px solid var(--line-strong); color: var(--accent);
@@ -288,8 +287,8 @@ kbd {
 .path-icon svg { width: 19px; height: 19px; }
 
 /* ---------- Role grid ---------- */
-.role-grid, .partner-grid, .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 32px; row-gap: 36px; }
-.role-card, .partner-card, .cert-card {
+.role-grid, .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 32px; row-gap: 36px; }
+.role-card, .cert-card {
   position: relative; display: flex; flex-direction: column; align-items: flex-start; text-align: left;
   padding: 20px 0 0; border: 0; border-top: 1px solid var(--line-strong); border-radius: 0; background: none;
   transition: border-color 0.2s, opacity 0.6s var(--ease), translate 0.6s var(--ease);
@@ -319,8 +318,8 @@ kbd {
 .role-panel .course-list li { opacity: 0; transform: translateY(6px); }
 .role-card.open .role-panel .course-list li { opacity: 1; transform: none; transition-delay: calc(0.12s + var(--i) * 0.045s); }
 .role-card .tag { position: absolute; top: 20px; right: 0; color: var(--muted); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; }
-.role-name, .partner-card h3, .cert-card h3 { margin: 14px 0 6px; font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
-.role-sub, .partner-card p, .cert-card p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.role-name, .cert-card h3 { margin: 14px 0 6px; font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
+.role-sub, .cert-card p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
 .role-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; margin-top: auto; color: var(--faint); font-size: 12.5px; }
 .role-view { font-size: 13.5px; }
 .role-card.selected .role-name { color: var(--ink); }
@@ -361,14 +360,11 @@ kbd {
 .cert-foot { margin: 56px 0 0; color: var(--muted); font-size: 15px; }
 .cert-foot .text-link { font-size: inherit; }
 
-/* ---------- Partners ---------- */
-.partner-grid { margin-bottom: 56px; }
-.partner-card .text-link { margin-top: auto; font-size: 13.5px; }
 .section-cta { display: flex; justify-content: center; }
 
 /* ---------- Pixel icons ---------- */
 .pixel-icon { display: block; width: auto; height: 20px; color: var(--accent); }
-.role-icon .pixel-icon, .cert-icon .pixel-icon, .partner-mark .pixel-icon, .step-icon .pixel-icon { height: 16px; }
+.role-icon .pixel-icon, .cert-icon .pixel-icon, .step-icon .pixel-icon { height: 16px; }
 .path-icon .pixel-icon { height: 16px; }
 .path-icon.lg .pixel-icon { height: 20px; }
 
@@ -407,7 +403,7 @@ kbd {
 /* ---------- Reveal on scroll ---------- */
 .reveal { opacity: 0; translate: 0 14px; transition: opacity 0.6s var(--ease), translate 0.6s var(--ease); transition-delay: var(--d, 0s); }
 .reveal.is-visible { opacity: 1; translate: 0 0; }
-.role-card.reveal, .cert-card.reveal, .partner-card.reveal { transition-delay: 0s, var(--d, 0s), var(--d, 0s); }
+.role-card.reveal, .cert-card.reveal { transition-delay: 0s, var(--d, 0s), var(--d, 0s); }
 
 /* ---------- Search ---------- */
 .search-overlay {
@@ -624,7 +620,7 @@ kbd {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-  .role-grid, .partner-grid, .cert-grid { grid-template-columns: repeat(2, 1fr); }
+  .role-grid, .cert-grid { grid-template-columns: repeat(2, 1fr); }
   .progress-card { position: static; width: min(360px, 100%); margin: 24px auto 0; }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .step, .step:first-child, .step:last-child { padding: 28px 24px 24px 0; border-left: 0; }
@@ -669,7 +665,7 @@ kbd {
   .hero-actions { flex-direction: column; width: 100%; }
   .hero-actions .btn { width: 100%; }
   .start-banner { flex-direction: column; align-items: flex-start; padding: 22px; }
-  .role-grid, .partner-grid, .cert-grid { grid-template-columns: 1fr; row-gap: 36px; }
+  .role-grid, .cert-grid { grid-template-columns: 1fr; row-gap: 36px; }
   .band { padding: 72px 0; margin-top: 80px; }
   .steps { grid-template-columns: 1fr; }
   .faq summary { font-size: 18px; }
