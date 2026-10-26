@@ -546,10 +546,30 @@ window.ACADEMY = {
         { title: "Your general ledger", color: "#4f86c6",
           description: "Journals, intercompany, FX and deferrals. The engine humming quietly underneath everything else.",
           lessons: [
-            { title: "Lesson 1" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "Journal entries: manual upload, review & dimensions", time: "4 min",
+              teaches: "uploading journal entries manually, the review step before posting, and tagging entries with dimensions.",
+              learn: "the manual posting workflow you'll fall back on outside of an automated integration.",
+              article: "https://light.inc/help/general-ledger/manual-journal-entries"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Intercompany: setting up rules & posting cross-entity journals", time: "4 min",
+              teaches: "configuring intercompany rules and posting a journal that crosses more than one entity.",
+              learn: "how eliminations are set up so consolidation ties out later.",
+              article: "https://light.inc/help/general-ledger/intercompany-documents"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "FX revaluation: what it does & which accounts it revalues", time: "5 min",
+              teaches: "what the FX revaluation process actually does and which account types it touches.",
+              learn: "how to explain a revaluation entry to a customer's finance team, and which accounts to check first when a balance looks off.",
+              article: "https://light.inc/help/general-ledger/fx-revaluations"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Releases & amortisation: setting up a deferral schedule", time: "5 min",
+              teaches: "building a release template so an expense or revenue line amortises over time instead of hitting the ledger all at once.",
+              learn: "how to configure a deferral schedule and apply it to a line item.",
+              article: "https://light.inc/help/general-ledger/deferred-entries"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Paying vendors", color: "#c0642f",
           description: "Vendor records, purchase orders and reimbursements, all in one calm place.",
