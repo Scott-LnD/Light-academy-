@@ -618,10 +618,29 @@ window.ACADEMY = {
         { title: "Banking & payments", color: "#c25a6a",
           description: "Payment runs, reconciliation and connecting your bank, matched up and tidy.",
           lessons: [
-            { title: "Banks, cards & integrations", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "Payment runs: building & releasing a batch (incl. multi-currency)", time: "3 min",
+              teaches: "building a payment run, batching it, and releasing it across more than one currency.",
+              learn: "the steps between bills being approved and money being sent, including how multi-currency batches are handled.",
+              article: "https://light.inc/help/accounts-payable/scheduling-payments"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Bank reconciliation: auto-match rules & write-offs", time: "5 min",
+              teaches: "setting up auto-match rules for bank reconciliation, and clearing small differences with a write-off.",
+              learn: "how to tune matching rules so reconciliation runs itself, and when a write-off is the right call.",
+              article: "https://light.inc/help/bank-reconciliation/automation-rules"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to integrate a bank feed", time: "4 min",
+              teaches: "connecting a live bank feed into Light.",
+              learn: "the connection steps, and what to check once the feed is live.",
+              article: "https://light.inc/help/bank-reconciliation/bank-feeds"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to set up Adyen", time: "3 min",
+              teaches: "onboarding an entity with Adyen so it can use Light cards: providing legal documents, setting limits, tracking the onboarding status of each entity, and creating card accounts once the entity is verified.",
+              learn: "that Adyen is the card issuer behind Light cards and confirms each entity before it can use them. Payments and collections run elsewhere: bills are paid through Airwallex and customer payments are collected through Stripe."
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Tax & compliance", color: "#a08f4f",
           description: "Tax codes, reverse charge and variances, handled without the guesswork.",
