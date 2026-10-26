@@ -609,7 +609,7 @@ window.ACADEMY = {
               // , content: [{ type: "video", src: "https://youtu.be/..." }]
             },
             { title: "Customising the dunning workflow", time: "4 min",
-              teaches: "customizing the dunning workflow, the automated chase sequence for overdue invoices.",
+              teaches: "customising the dunning workflow, the automated chase sequence for overdue invoices.",
               learn: "where the escalation steps and timing live, and how to tailor them per customer.",
               article: "https://light.inc/help/user-management/approval-workflows"
               // , content: [{ type: "video", src: "https://youtu.be/..." }]
