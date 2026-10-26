@@ -530,8 +530,18 @@ window.ACADEMY = {
         { title: "Bringing your data across", color: "#8a77c2",
           description: "Moving your vendors, customers and history over from your old system, without the headache.",
           lessons: [
-            { title: "Opening balances", time: "15–30 min" },
-            { title: "Lesson 2" }
+            { title: "Importing your data (CSV): the general pattern & fixing error files", time: "3 min",
+              teaches: "the general pattern for importing data via CSV, plus how to read and fix an error file.",
+              learn: "the shape Light expects a CSV to be in, and the fastest way to resolve a failed import.",
+              article: "https://light.inc/help/integrations/data-import"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Cleaning up vendor/customer records when migrating from a legacy system", time: "5 min",
+              teaches: "cleaning duplicate or inconsistent vendor and customer records before they migrate.",
+              learn: "what \"clean\" looks like before cutover, so a migration doesn't inherit legacy mess.",
+              article: "https://light.inc/help/integrations/cutover"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Your general ledger", color: "#4f86c6",
           description: "Journals, intercompany, FX and deferrals. The engine humming quietly underneath everything else.",
