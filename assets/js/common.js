@@ -84,7 +84,7 @@
       '<p class="pm-meta">' + feat.done + " of " + feat.total + " lessons complete</p>" +
       (goIdx >= 0
         ? '<a class="pm-link" role="menuitem" href="' + U.lessonUrl(role.slug, goIdx) + '"><span><span class="pm-kicker">' +
-          (feat.started || lastIdx > 0 ? "Continue" : "Start") + "</span>" + U.escape(role.courses[goIdx].title) + "</span>" + U.icon("arrow") + "</a>"
+          (feat.started || lastIdx > 0 ? "Continue" : "Start") + "</span>" + U.escape(U.courseTitle(role, role.courses[goIdx])) + "</span>" + U.icon("arrow") + "</a>"
         : "") +
       '<a class="pm-link" role="menuitem" href="' + homeLink("#certifications") + '"><span>My certifications</span>' + U.icon("arrow") + "</a>";
     btn.addEventListener("click", (e) => {
@@ -170,7 +170,7 @@
       '<p class="resume-label"><span class="resume-dot" aria-hidden="true"></span>Continue where you left off</p>' +
       '<a class="resume-btn" href="' + U.lessonUrl(slug, idx) + '">' +
       '<span class="resume-play">' + U.icon("play") + "</span>" +
-      '<span class="resume-text"><span class="resume-path">' + U.escape(role.name) + "</span>" + U.escape(role.courses[idx].title) + "</span>" +
+      '<span class="resume-text"><span class="resume-path">' + U.escape(role.name) + "</span>" + U.escape(U.courseTitle(role, role.courses[idx])) + "</span>" +
       U.icon("arrow") +
       "</a></div>";
     const header = document.getElementById("site-header");

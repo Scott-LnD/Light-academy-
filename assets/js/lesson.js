@@ -169,6 +169,32 @@
 
   /* ---------- Page ---------- */
 
+  // Chapters (optional): a heading before each chapter's first lesson.
+  function startsChapter(i) {
+    return !!r.chapters && r.courses[i].chapterIndex === 0;
+  }
+  function chapterDot(c) {
+    return '<span class="chapter-dot" style="--chapter: ' + esc(r.chapters[c.chapter].color || "var(--accent)") + '"></span>';
+  }
+  function chapterHead(c) {
+    const ch = r.chapters[c.chapter];
+    const n = ch.lessons.length;
+    return (
+      '<header class="chapter-head reveal">' +
+      "<div>" +
+      '<p class="chapter-kicker">Chapter ' + (c.chapter + 1) + " of " + r.chapters.length + "</p>" +
+      "<h2>" + chapterDot(c) + esc(ch.title) + "</h2>" +
+      (ch.description ? '<p class="muted">' + esc(ch.description) + "</p>" : "") +
+      "</div>" +
+      '<span class="chapter-count">' + n + (n === 1 ? " video" : " videos") + "</span>" +
+      "</header>"
+    );
+  }
+  function lessonLabel(c, i) {
+    if (r.chapters) return "Chapter " + (c.chapter + 1) + " · Lesson " + (c.chapterIndex + 1) + " of " + r.chapters[c.chapter].lessons.length;
+    return "Lesson " + (i + 1) + " of " + r.courses.length;
+  }
+
   function nextButton(i) {
     const last = i === r.courses.length - 1;
     return (
@@ -204,6 +230,7 @@
     r.courses
       .map(
         (c, i) =>
+          (startsChapter(i) ? '<li class="toc-chapter">' + chapterDot(c) + esc(r.chapters[c.chapter].title) + "</li>" : "") +
           '<li><a href="#lesson-' + c.id + '" data-id="' + c.id + '">' +
           '<span class="course-num" data-n="' + (i + 1) + '">' + (i + 1) + "</span>" + esc(c.title) + "</a></li>"
       )
@@ -214,10 +241,11 @@
       .map((c, i) => {
         const prev = i > 0 ? '<a class="btn btn-ghost btn-sm" href="#lesson-' + r.courses[i - 1].id + '"><span class="btn-icon">' + U.icon("back") + "</span> Previous</a>" : "<span></span>";
         return (
+          (startsChapter(i) ? chapterHead(c) : "") +
           '<article class="lesson-card glass reveal" id="lesson-' + c.id + '" data-id="' + c.id + '">' +
           '<header class="lesson-card-head">' +
           '<span class="course-num" data-n="' + (i + 1) + '">' + (i + 1) + "</span>" +
-          '<div><p class="muted small">Lesson ' + (i + 1) + " of " + r.courses.length + (c.time ? " · " + esc(c.time) : "") + "</p><h2>" + esc(c.title) + "</h2></div>" +
+          '<div><p class="muted small">' + lessonLabel(c, i) + (c.time ? " · " + esc(c.time) : "") + "</p><h2>" + esc(c.title) + "</h2></div>" +
           '<span class="lesson-status"></span>' +
           "</header>" +
           '<div class="lesson-body">' + lessonBody(c) + "</div>" +

@@ -6,6 +6,10 @@
  * should appear. Homepage counts, search, the lesson page and progress all
  * pick it up automatically.
  *
+ * CHAPTERS: a path can use `chapters` instead of `courses`, each with a
+ * title, description, color and its own `lessons` list (see go-live below).
+ * Chapter lessons get an id like "getting-paid-2", so renaming one is safe.
+ *
  * LESSON FIELDS
  *   title    (required) Shown everywhere.
  *   time     Duration label, e.g. "15–30 min".
@@ -484,12 +488,77 @@ window.ACADEMY = {
       icon: "compass",
       eyebrow: "New customer",
       description: "Everything a new customer needs to get from signed contract to a live Light instance.",
-      courses: [
-        { title: "Kick-off & data checklist", time: "15 min" },
-        { title: "Entities & chart of accounts", time: "15–30 min" },
-        { title: "Users, roles & approvals", time: "15–30 min" },
-        { title: "Banks, cards & integrations", time: "15–30 min" },
-        { title: "Opening balances & your first close", time: "15–30 min" }
+      // Lessons are grouped into chapters. Rename a "Lesson N" placeholder
+      // freely: chapter lessons keep their id (and learners' check marks).
+      chapters: [
+        { title: "Getting started", color: "#6f9e7a",
+          description: "Your first look at Light, and how to move around like you've been here for months.",
+          lessons: [
+            { title: "Kick-off & data checklist", time: "15 min" }
+          ] },
+        { title: "Setting up your workspace", color: "#d39a2e",
+          description: "Custom properties, accounting periods and templates. The foundations you'll put in place once, then forget you ever had to.",
+          lessons: [
+            { title: "Entities & chart of accounts", time: "15–30 min" },
+            { title: "Lesson 2" },
+            { title: "Lesson 3" }
+          ] },
+        { title: "Bringing your data across", color: "#8a77c2",
+          description: "Moving your vendors, customers and history over from your old system, without the headache.",
+          lessons: [
+            { title: "Opening balances", time: "15–30 min" },
+            { title: "Lesson 2" }
+          ] },
+        { title: "Your general ledger", color: "#4f86c6",
+          description: "Journals, intercompany, FX and deferrals. The engine humming quietly underneath everything else.",
+          lessons: [
+            { title: "Lesson 1" },
+            { title: "Lesson 2" },
+            { title: "Lesson 3" },
+            { title: "Lesson 4" }
+          ] },
+        { title: "Paying vendors", color: "#c0642f",
+          description: "Vendor records, purchase orders and reimbursements, all in one calm place.",
+          lessons: [
+            { title: "Lesson 1" },
+            { title: "Lesson 2" },
+            { title: "Lesson 3" },
+            { title: "Lesson 4" }
+          ] },
+        { title: "Getting paid", color: "#3f9e8c",
+          description: "Contracts, recurring invoices and gentle nudges, so the money finds its way to you.",
+          lessons: [
+            { title: "Lesson 1" },
+            { title: "Lesson 2" }
+          ] },
+        { title: "Banking & payments", color: "#c25a6a",
+          description: "Payment runs, reconciliation and connecting your bank, matched up and tidy.",
+          lessons: [
+            { title: "Banks, cards & integrations", time: "15–30 min" },
+            { title: "Lesson 2" },
+            { title: "Lesson 3" },
+            { title: "Lesson 4" }
+          ] },
+        { title: "Tax & compliance", color: "#a08f4f",
+          description: "Tax codes, reverse charge and variances, handled without the guesswork.",
+          lessons: [
+            { title: "Lesson 1" }
+          ] },
+        { title: "Closing your books & reporting", color: "#7480b5",
+          description: "Month end, year end, and the reports your team will actually want to read.",
+          lessons: [
+            { title: "Your first close", time: "15–30 min" },
+            { title: "Lesson 2" },
+            { title: "Lesson 3" },
+            { title: "Lesson 4" }
+          ] },
+        { title: "Connecting your tools", color: "#a87aae",
+          description: "Approval chains, plus Slack, Teams and Gmail, so Light fits right into how you already work.",
+          lessons: [
+            { title: "Users, roles & approvals", time: "15–30 min" },
+            { title: "Lesson 2" },
+            { title: "Lesson 3" }
+          ] }
       ]
     }
   ]
@@ -585,6 +654,10 @@ window.ACADEMY_UTIL = {
   logoMark() {
     return '<svg class="logo-mark" viewBox="0 0 3 3" aria-hidden="true" shape-rendering="crispEdges"><rect x="0" y="0" width="1" height="2"/><rect x="2" y="0" width="1" height="1"/><rect x="1" y="2" width="2" height="1"/></svg>';
   },
+  // A lesson title with its chapter in front, for places shown out of context.
+  courseTitle(role, course) {
+    return role.chapters && course.chapter != null ? role.chapters[course.chapter].title + ": " + course.title : course.title;
+  },
   slugify(s) {
     return String(s).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   },
@@ -631,6 +704,20 @@ window.ACADEMY_UTIL = {
   const A = window.ACADEMY;
   const U = window.ACADEMY_UTIL;
   [A.getStarted].concat(A.roles, A.extraPaths).forEach((path) => {
+    // A path with chapters gets a flat lesson list, each lesson knowing its
+    // chapter. Chapter lesson ids default to "<chapter>-<n>", so renaming a
+    // lesson keeps its progress.
+    if (path.chapters) {
+      path.courses = [];
+      path.chapters.forEach((ch, ci) => {
+        ch.lessons.forEach((c, li) => {
+          c.chapter = ci;
+          c.chapterIndex = li;
+          if (!c.id) c.id = U.slugify(ch.title) + "-" + (li + 1);
+          path.courses.push(c);
+        });
+      });
+    }
     const seen = {};
     path.courses.forEach((c) => {
       let id = c.id || U.slugify(c.title);
