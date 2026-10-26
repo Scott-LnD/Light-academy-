@@ -645,7 +645,12 @@ window.ACADEMY = {
         { title: "Tax & compliance", color: "#a08f4f",
           description: "Tax codes, reverse charge and variances, handled without the guesswork.",
           lessons: [
-            { title: "Lesson 1" }
+            { title: "VAT & tax codes: setup, reverse charge & reading a variance", time: "2 min",
+              teaches: "setting up tax codes, configuring reverse charge, and reading a tax variance report.",
+              learn: "how to set up a country's VAT codes correctly, and spot a variance before it becomes a filing problem.",
+              article: "https://light.inc/help/organization-setup/tax-vat-configuration"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Closing your books & reporting", color: "#7480b5",
           description: "Month end, year end, and the reports your team will actually want to read.",
