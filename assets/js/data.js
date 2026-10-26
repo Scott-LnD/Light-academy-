@@ -20,6 +20,8 @@
  *   teaches  Optional. "Teaches:" line shown under the lesson's video.
  *   learn    Optional. "You'll learn:" line shown under it.
  *   article  Optional help article link, shown as "Read the help article".
+ *   articles Optional list instead, for more than one button:
+ *            [{ label: "P&L article", url: "https://..." }, ...]
  *   content  Optional list of blocks, shown top to bottom. Without it the
  *            lesson shows "video" and "interactive demo" placeholders.
  *
@@ -655,10 +657,34 @@ window.ACADEMY = {
         { title: "Closing your books & reporting", color: "#7480b5",
           description: "Month end, year end, and the reports your team will actually want to read.",
           lessons: [
-            { title: "Your first close", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "The month-end closure process", time: "5 min",
+              teaches: "the end-to-end month-end close checklist inside Light.",
+              learn: "the order of operations for a clean close, and where to look when something doesn't tie out.",
+              article: "https://light.inc/help/general-ledger/closing-periods"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Year-end close journals", time: "1 min",
+              teaches: "the journals specific to a year-end close.",
+              learn: "what's different about year end versus a regular month end, and which entries only happen once a year.",
+              article: "https://light.inc/help/general-ledger/year-end-closing"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Building a pivot/table report with custom properties", time: "3 min",
+              teaches: "building a pivot or table report that uses custom properties as its dimensions.",
+              learn: "how to construct a report a customer's team can actually read, using the properties set up earlier.",
+              article: "https://light.inc/help/reporting/tables-pivot-reports"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Customising standard reports (Income Statement, Balance Sheet, Trial Balance)", time: "5 min",
+              teaches: "customising Light's standard financial statements.",
+              learn: "which parts of the Income Statement, Balance Sheet and Trial Balance are configurable, and how to adjust them for a customer's preferred format.",
+              articles: [
+                { label: "P&L article", url: "https://light.inc/help/reporting/profit-loss" },
+                { label: "Balance Sheet article", url: "https://light.inc/help/reporting/balance-sheet" },
+                { label: "Trial Balance article", url: "https://light.inc/help/reporting/trial-balance" }
+              ]
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Connecting your tools", color: "#a87aae",
           description: "Approval chains, plus Slack, Teams and Gmail, so Light fits right into how you already work.",
