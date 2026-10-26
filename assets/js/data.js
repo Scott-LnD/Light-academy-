@@ -508,9 +508,24 @@ window.ACADEMY = {
         { title: "Setting up your workspace", color: "#d39a2e",
           description: "Custom properties, accounting periods and templates. The foundations you'll put in place once, then forget you ever had to.",
           lessons: [
-            { title: "Entities & chart of accounts", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" }
+            { title: "Custom properties setup", time: "4 min",
+              teaches: "how to add custom properties (dimensions) to transactions and records, so a customer's chart of accounts can carry the tags their reporting needs.",
+              learn: "where properties live, how to create one, and where it shows up across the ledger once it's live.",
+              article: "https://light.inc/help/organization-setup/custom-properties"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to create accounting periods", time: "3 min",
+              teaches: "opening, closing and locking accounting periods for an entity.",
+              learn: "the sequence for setting up a fiscal calendar and why period locks matter before a close.",
+              article: "https://light.inc/help/organization-setup/fiscal-year-periods"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Customising invoice, credit note & PO PDF templates", time: "5 min",
+              teaches: "editing the PDF templates Light generates for invoices, credit notes and purchase orders.",
+              learn: "where template fields map to ledger data, and how to adjust layout and branding for a customer.",
+              article: "https://light.inc/help/accounts-receivable/invoice-templates"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Bringing your data across", color: "#8a77c2",
           description: "Moving your vendors, customers and history over from your old system, without the headache.",
