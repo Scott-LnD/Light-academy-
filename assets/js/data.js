@@ -602,8 +602,18 @@ window.ACADEMY = {
         { title: "Getting paid", color: "#3f9e8c",
           description: "Contracts, recurring invoices and gentle nudges, so the money finds its way to you.",
           lessons: [
-            { title: "Lesson 1" },
-            { title: "Lesson 2" }
+            { title: "Contracts & recurring billing: publish a contract + invoice schedule", time: "5 min",
+              teaches: "publishing a sales contract and generating its recurring invoice schedule.",
+              learn: "how a contract line turns into a billing cadence a customer can rely on.",
+              article: "https://light.inc/help/accounts-receivable/contracts"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Customising the dunning workflow", time: "4 min",
+              teaches: "customizing the dunning workflow, the automated chase sequence for overdue invoices.",
+              learn: "where the escalation steps and timing live, and how to tailor them per customer.",
+              article: "https://light.inc/help/user-management/approval-workflows"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Banking & payments", color: "#c25a6a",
           description: "Payment runs, reconciliation and connecting your bank, matched up and tidy.",
