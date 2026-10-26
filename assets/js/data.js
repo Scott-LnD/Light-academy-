@@ -574,10 +574,30 @@ window.ACADEMY = {
         { title: "Paying vendors", color: "#c0642f",
           description: "Vendor records, purchase orders and reimbursements, all in one calm place.",
           lessons: [
-            { title: "Lesson 1" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "Creating a vendor record", time: "5 min",
+              teaches: "the fields and setup involved in creating a new vendor record.",
+              learn: "what a complete vendor record needs before the first bill can be coded to it.",
+              article: "https://light.inc/help/accounts-payable/managing-vendors"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Vendor onboarding & the vendor portal", time: "4 min",
+              teaches: "how a vendor is invited onto the vendor portal, and what they can see and do there.",
+              learn: "the vendor-facing side of onboarding, for when a customer asks what their suppliers will experience.",
+              article: "https://light.inc/help/accounts-payable/vendor-portal"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Purchase requests & purchase orders (PR to PO to bill match)", time: "4 min",
+              teaches: "the full chain from a purchase request through to a purchase order and the eventual bill match.",
+              learn: "how the three-way match works, and where it can break.",
+              article: "https://light.inc/help/accounts-payable/purchase-orders"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Set up user reimbursement details", time: "5 min",
+              teaches: "setting up a user's reimbursement profile so expense claims pay out correctly.",
+              learn: "which fields are required, and where reimbursement currency and bank details live.",
+              article: "https://light.inc/help/accounts-payable/employee-reimbursements"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Getting paid", color: "#3f9e8c",
           description: "Contracts, recurring invoices and gentle nudges, so the money finds its way to you.",
