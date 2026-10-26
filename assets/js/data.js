@@ -17,6 +17,9 @@
  *            slug of the title. Set it before renaming a lesson so learners
  *            keep their check mark.
  *   url      Optional. Send this lesson to a separate page instead.
+ *   teaches  Optional. "Teaches:" line shown under the lesson's video.
+ *   learn    Optional. "You'll learn:" line shown under it.
+ *   article  Optional help article link, shown as "Read the help article".
  *   content  Optional list of blocks, shown top to bottom. Without it the
  *            lesson shows "video" and "interactive demo" placeholders.
  *
@@ -494,7 +497,13 @@ window.ACADEMY = {
         { title: "Getting started", color: "#6f9e7a",
           description: "Your first look at Light, and how to move around like you've been here for months.",
           lessons: [
-            { title: "Kick-off & data checklist", time: "15 min" }
+            { title: "How to navigate", time: "8 min",
+              teaches: "a tour of the Light interface: the main navigation, where the ledger, apps and workforce live, and how the pieces connect to each other.",
+              learn: "how to move around Light confidently before you open a live customer implementation.",
+              article: "https://light.inc/help/getting-started/navigating-the-dashboard"
+              // To add the video, uncomment and paste the YouTube link:
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Setting up your workspace", color: "#d39a2e",
           description: "Custom properties, accounting periods and templates. The foundations you'll put in place once, then forget you ever had to.",

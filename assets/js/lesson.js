@@ -159,12 +159,28 @@
             { type: "placeholder", kind: "video", slot: slug + "/" + c.id },
             { type: "placeholder", kind: "demo", slot: slug + "/" + c.id }
           ];
-    return blocks
-      .map((b) => {
-        const fn = BLOCKS[b.type];
-        return fn ? fn(b) : "";
-      })
-      .join("");
+    return (
+      blocks
+        .map((b) => {
+          const fn = BLOCKS[b.type];
+          return fn ? fn(b) : "";
+        })
+        .join("") + lessonAbout(c)
+    );
+  }
+
+  // "Teaches", "You'll learn" and the help article link, under the media.
+  function lessonAbout(c) {
+    if (!c.teaches && !c.learn && !c.article) return "";
+    return (
+      '<div class="lesson-about">' +
+      (c.teaches ? "<p><strong>Teaches:</strong> " + esc(c.teaches) + "</p>" : "") +
+      (c.learn ? "<p><strong>You'll learn:</strong> " + esc(c.learn) + "</p>" : "") +
+      (c.article
+        ? '<a class="btn btn-ghost btn-sm" href="' + esc(c.article) + '" target="_blank" rel="noopener">Read the help article <span class="btn-icon">' + U.icon("arrow") + "</span></a>"
+        : "") +
+      "</div>"
+    );
   }
 
   /* ---------- Page ---------- */
