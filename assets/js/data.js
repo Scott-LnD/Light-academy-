@@ -689,9 +689,27 @@ window.ACADEMY = {
         { title: "Connecting your tools", color: "#a87aae",
           description: "Approval chains, plus Slack, Teams and Gmail, so Light fits right into how you already work.",
           lessons: [
-            { title: "Users, roles & approvals", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" }
+            { title: "Approval workflows: building a multi-tier approval chain", time: "2 min",
+              teaches: "building an approval workflow with more than one tier of sign-off.",
+              learn: "how to configure who approves what, and in which order, before a transaction posts.",
+              article: "https://light.inc/help/user-management/approval-workflows"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Integrating Slack / Teams", time: "3 min",
+              teaches: "connecting Slack or Teams so agent approvals and notifications land where the finance team already works.",
+              learn: "the connection steps, and what shows up in the channel once it's live.",
+              articles: [
+                { label: "Slack article", url: "https://light.inc/help/integrations/slack" },
+                { label: "Teams article", url: "https://light.inc/help/integrations/microsoft-teams" }
+              ]
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to integrate Gmail", time: "2 min",
+              teaches: "connecting Gmail so Light can send and receive the emails a workflow needs.",
+              learn: "the authorization steps, and what breaks if a mailbox is disconnected later.",
+              article: "https://light.inc/help/integrations/gmail"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] }
       ]
     }
