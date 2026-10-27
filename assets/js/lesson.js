@@ -169,15 +169,20 @@
     );
   }
 
-  // "Teaches", "You'll learn" and the help article link, under the media.
+  // "Teaches", "You'll learn" and the help article links, under the media.
   function lessonAbout(c) {
-    if (!c.teaches && !c.learn && !c.article) return "";
+    const links = c.articles || (c.article ? [{ label: "Read the help article", url: c.article }] : []);
+    if (!c.teaches && !c.learn && !links.length) return "";
     return (
       '<div class="lesson-about">' +
       (c.teaches ? "<p><strong>Teaches:</strong> " + esc(c.teaches) + "</p>" : "") +
       (c.learn ? "<p><strong>You'll learn:</strong> " + esc(c.learn) + "</p>" : "") +
-      (c.article
-        ? '<a class="btn btn-ghost btn-sm" href="' + esc(c.article) + '" target="_blank" rel="noopener">Read the help article <span class="btn-icon">' + U.icon("arrow") + "</span></a>"
+      (links.length
+        ? '<div class="lesson-links">' +
+          links
+            .map((a) => '<a class="btn btn-ghost btn-sm" href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.label) + ' <span class="btn-icon">' + U.icon("arrow") + "</span></a>")
+            .join("") +
+          "</div>"
         : "") +
       "</div>"
     );

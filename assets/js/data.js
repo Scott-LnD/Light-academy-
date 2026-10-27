@@ -20,6 +20,8 @@
  *   teaches  Optional. "Teaches:" line shown under the lesson's video.
  *   learn    Optional. "You'll learn:" line shown under it.
  *   article  Optional help article link, shown as "Read the help article".
+ *   articles Optional list instead, for more than one button:
+ *            [{ label: "P&L article", url: "https://..." }, ...]
  *   content  Optional list of blocks, shown top to bottom. Without it the
  *            lesson shows "video" and "interactive demo" placeholders.
  *
@@ -508,65 +510,206 @@ window.ACADEMY = {
         { title: "Setting up your workspace", color: "#d39a2e",
           description: "Custom properties, accounting periods and templates. The foundations you'll put in place once, then forget you ever had to.",
           lessons: [
-            { title: "Entities & chart of accounts", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" }
+            { title: "Custom properties setup", time: "4 min",
+              teaches: "how to add custom properties (dimensions) to transactions and records, so a customer's chart of accounts can carry the tags their reporting needs.",
+              learn: "where properties live, how to create one, and where it shows up across the ledger once it's live.",
+              article: "https://light.inc/help/organization-setup/custom-properties"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to create accounting periods", time: "3 min",
+              teaches: "opening, closing and locking accounting periods for an entity.",
+              learn: "the sequence for setting up a fiscal calendar and why period locks matter before a close.",
+              article: "https://light.inc/help/organization-setup/fiscal-year-periods"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Customising invoice, credit note & PO PDF templates", time: "5 min",
+              teaches: "editing the PDF templates Light generates for invoices, credit notes and purchase orders.",
+              learn: "where template fields map to ledger data, and how to adjust layout and branding for a customer.",
+              article: "https://light.inc/help/accounts-receivable/invoice-templates"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Bringing your data across", color: "#8a77c2",
           description: "Moving your vendors, customers and history over from your old system, without the headache.",
           lessons: [
-            { title: "Opening balances", time: "15–30 min" },
-            { title: "Lesson 2" }
+            { title: "Importing your data (CSV): the general pattern & fixing error files", time: "3 min",
+              teaches: "the general pattern for importing data via CSV, plus how to read and fix an error file.",
+              learn: "the shape Light expects a CSV to be in, and the fastest way to resolve a failed import.",
+              article: "https://light.inc/help/integrations/data-import"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Cleaning up vendor/customer records when migrating from a legacy system", time: "5 min",
+              teaches: "cleaning duplicate or inconsistent vendor and customer records before they migrate.",
+              learn: "what \"clean\" looks like before cutover, so a migration doesn't inherit legacy mess.",
+              article: "https://light.inc/help/integrations/cutover"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Your general ledger", color: "#4f86c6",
           description: "Journals, intercompany, FX and deferrals. The engine humming quietly underneath everything else.",
           lessons: [
-            { title: "Lesson 1" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "Journal entries: manual upload, review & dimensions", time: "4 min",
+              teaches: "uploading journal entries manually, the review step before posting, and tagging entries with dimensions.",
+              learn: "the manual posting workflow you'll fall back on outside of an automated integration.",
+              article: "https://light.inc/help/general-ledger/manual-journal-entries"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Intercompany: setting up rules & posting cross-entity journals", time: "4 min",
+              teaches: "configuring intercompany rules and posting a journal that crosses more than one entity.",
+              learn: "how eliminations are set up so consolidation ties out later.",
+              article: "https://light.inc/help/general-ledger/intercompany-documents"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "FX revaluation: what it does & which accounts it revalues", time: "5 min",
+              teaches: "what the FX revaluation process actually does and which account types it touches.",
+              learn: "how to explain a revaluation entry to a customer's finance team, and which accounts to check first when a balance looks off.",
+              article: "https://light.inc/help/general-ledger/fx-revaluations"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Releases & amortisation: setting up a deferral schedule", time: "5 min",
+              teaches: "building a release template so an expense or revenue line amortises over time instead of hitting the ledger all at once.",
+              learn: "how to configure a deferral schedule and apply it to a line item.",
+              article: "https://light.inc/help/general-ledger/deferred-entries"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Paying vendors", color: "#c0642f",
           description: "Vendor records, purchase orders and reimbursements, all in one calm place.",
           lessons: [
-            { title: "Lesson 1" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "Creating a vendor record", time: "5 min",
+              teaches: "the fields and setup involved in creating a new vendor record.",
+              learn: "what a complete vendor record needs before the first bill can be coded to it.",
+              article: "https://light.inc/help/accounts-payable/managing-vendors"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Vendor onboarding & the vendor portal", time: "4 min",
+              teaches: "how a vendor is invited onto the vendor portal, and what they can see and do there.",
+              learn: "the vendor-facing side of onboarding, for when a customer asks what their suppliers will experience.",
+              article: "https://light.inc/help/accounts-payable/vendor-portal"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Purchase requests & purchase orders (PR to PO to bill match)", time: "4 min",
+              teaches: "the full chain from a purchase request through to a purchase order and the eventual bill match.",
+              learn: "how the three-way match works, and where it can break.",
+              article: "https://light.inc/help/accounts-payable/purchase-orders"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Set up user reimbursement details", time: "5 min",
+              teaches: "setting up a user's reimbursement profile so expense claims pay out correctly.",
+              learn: "which fields are required, and where reimbursement currency and bank details live.",
+              article: "https://light.inc/help/accounts-payable/employee-reimbursements"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Getting paid", color: "#3f9e8c",
           description: "Contracts, recurring invoices and gentle nudges, so the money finds its way to you.",
           lessons: [
-            { title: "Lesson 1" },
-            { title: "Lesson 2" }
+            { title: "Contracts & recurring billing: publish a contract + invoice schedule", time: "5 min",
+              teaches: "publishing a sales contract and generating its recurring invoice schedule.",
+              learn: "how a contract line turns into a billing cadence a customer can rely on.",
+              article: "https://light.inc/help/accounts-receivable/contracts"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Customising the dunning workflow", time: "4 min",
+              teaches: "customising the dunning workflow, the automated chase sequence for overdue invoices.",
+              learn: "where the escalation steps and timing live, and how to tailor them per customer.",
+              article: "https://light.inc/help/user-management/approval-workflows"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Banking & payments", color: "#c25a6a",
           description: "Payment runs, reconciliation and connecting your bank, matched up and tidy.",
           lessons: [
-            { title: "Banks, cards & integrations", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "Payment runs: building & releasing a batch (incl. multi-currency)", time: "3 min",
+              teaches: "building a payment run, batching it, and releasing it across more than one currency.",
+              learn: "the steps between bills being approved and money being sent, including how multi-currency batches are handled.",
+              article: "https://light.inc/help/accounts-payable/scheduling-payments"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Bank reconciliation: auto-match rules & write-offs", time: "5 min",
+              teaches: "setting up auto-match rules for bank reconciliation, and clearing small differences with a write-off.",
+              learn: "how to tune matching rules so reconciliation runs itself, and when a write-off is the right call.",
+              article: "https://light.inc/help/bank-reconciliation/automation-rules"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to integrate a bank feed", time: "4 min",
+              teaches: "connecting a live bank feed into Light.",
+              learn: "the connection steps, and what to check once the feed is live.",
+              article: "https://light.inc/help/bank-reconciliation/bank-feeds"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to set up Adyen", time: "3 min",
+              teaches: "onboarding an entity with Adyen so it can use Light cards: providing legal documents, setting limits, tracking the onboarding status of each entity, and creating card accounts once the entity is verified.",
+              learn: "that Adyen is the card issuer behind Light cards and confirms each entity before it can use them. Payments and collections run elsewhere: bills are paid through Airwallex and customer payments are collected through Stripe."
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Tax & compliance", color: "#a08f4f",
           description: "Tax codes, reverse charge and variances, handled without the guesswork.",
           lessons: [
-            { title: "Lesson 1" }
+            { title: "VAT & tax codes: setup, reverse charge & reading a variance", time: "2 min",
+              teaches: "setting up tax codes, configuring reverse charge, and reading a tax variance report.",
+              learn: "how to set up a country's VAT codes correctly, and spot a variance before it becomes a filing problem.",
+              article: "https://light.inc/help/organization-setup/tax-vat-configuration"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Closing your books & reporting", color: "#7480b5",
           description: "Month end, year end, and the reports your team will actually want to read.",
           lessons: [
-            { title: "Your first close", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" },
-            { title: "Lesson 4" }
+            { title: "The month-end closure process", time: "5 min",
+              teaches: "the end-to-end month-end close checklist inside Light.",
+              learn: "the order of operations for a clean close, and where to look when something doesn't tie out.",
+              article: "https://light.inc/help/general-ledger/closing-periods"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Year-end close journals", time: "1 min",
+              teaches: "the journals specific to a year-end close.",
+              learn: "what's different about year end versus a regular month end, and which entries only happen once a year.",
+              article: "https://light.inc/help/general-ledger/year-end-closing"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Building a pivot/table report with custom properties", time: "3 min",
+              teaches: "building a pivot or table report that uses custom properties as its dimensions.",
+              learn: "how to construct a report a customer's team can actually read, using the properties set up earlier.",
+              article: "https://light.inc/help/reporting/tables-pivot-reports"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Customising standard reports (Income Statement, Balance Sheet, Trial Balance)", time: "5 min",
+              teaches: "customising Light's standard financial statements.",
+              learn: "which parts of the Income Statement, Balance Sheet and Trial Balance are configurable, and how to adjust them for a customer's preferred format.",
+              articles: [
+                { label: "P&L article", url: "https://light.inc/help/reporting/profit-loss" },
+                { label: "Balance Sheet article", url: "https://light.inc/help/reporting/balance-sheet" },
+                { label: "Trial Balance article", url: "https://light.inc/help/reporting/trial-balance" }
+              ]
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] },
         { title: "Connecting your tools", color: "#a87aae",
           description: "Approval chains, plus Slack, Teams and Gmail, so Light fits right into how you already work.",
           lessons: [
-            { title: "Users, roles & approvals", time: "15–30 min" },
-            { title: "Lesson 2" },
-            { title: "Lesson 3" }
+            { title: "Approval workflows: building a multi-tier approval chain", time: "2 min",
+              teaches: "building an approval workflow with more than one tier of sign-off.",
+              learn: "how to configure who approves what, and in which order, before a transaction posts.",
+              article: "https://light.inc/help/user-management/approval-workflows"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "Integrating Slack / Teams", time: "3 min",
+              teaches: "connecting Slack or Teams so agent approvals and notifications land where the finance team already works.",
+              learn: "the connection steps, and what shows up in the channel once it's live.",
+              articles: [
+                { label: "Slack article", url: "https://light.inc/help/integrations/slack" },
+                { label: "Teams article", url: "https://light.inc/help/integrations/microsoft-teams" }
+              ]
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            },
+            { title: "How to integrate Gmail", time: "2 min",
+              teaches: "connecting Gmail so Light can send and receive the emails a workflow needs.",
+              learn: "the authorization steps, and what breaks if a mailbox is disconnected later.",
+              article: "https://light.inc/help/integrations/gmail"
+              // , content: [{ type: "video", src: "https://youtu.be/..." }]
+            }
           ] }
       ]
     }
